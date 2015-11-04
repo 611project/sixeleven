@@ -9,7 +9,7 @@ Ownership of a name is based on ownership of a coin, which is in turn based on p
 
 In despite of Namecoin SixEleven domain objects will be published and accessible globally via the (611.to) gobal domain name system as long as entries are setup accurate and do not violate the tonic terms of service.
 
-The number of SixEleven coins is restricted to no more than 611 thousand. Fees and mining values are set appropriate to make sure this service will not become a mass article.
+The number of SixEleven coins is restricted to about 611 thousand. Fees and mining values are set appropriate to make sure this service will not become a mass article.
 
 There is a FAQ.md to answer some general questions.
 
@@ -23,11 +23,11 @@ The Bitcoin protocol is augmented with 611 operations, to reserve, register and 
 
 The protocol differences from bitcoin include:
 
-* Different blockchain, port, IRC bootstrap and message header
+* Different blockchain, port, IRC bootstrap, dnsseed and message header
 * New transaction types: new, first-update, update
 * Validation on the new transaction types
 * RPC calls for managing names
-* Network fees to slow down the initial rush
+* Increased network fees to slow down the initial rush and to reward miners.
 
 Please read DESIGN-611d.md for details.
 
