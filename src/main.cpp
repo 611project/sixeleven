@@ -34,7 +34,7 @@ map<COutPoint, CInPoint> mapNextTx;
 CMapBlockIndex mapBlockIndex;
 uint256 hashGenesisBlock("0x00000000bd61ac4b6a92d497274090be8448277beccb90c91e70d275243da1d2");
 // CBigNum bnProofOfWorkLimit(~uint256(0) >> 32);
-CBigNum bnProofOfWorkLimit(~uint256(0) >> 15);
+CBigNum bnProofOfWorkLimit(~uint256(0) >> 16);
 const int nInitialBlockThreshold = 120; // Regard blocks up until N-threshold as "initial download"
 CBlockIndex* pindexGenesisBlock = NULL;
 int nBestHeight = -1;
@@ -878,7 +878,17 @@ unsigned int static GetNextWorkRequired(const CBlockIndex* pindexLast, const CBl
                 return pindex->nBits;
             }
         }
-
+        // Special rule for mainnet after 05 Nov 2016:
+        if (pblock->nTime > 1446678000)
+        {
+            // If the new block's timestamp is more than 6* 5 minutes
+            // then allow mining of a min-difficulty block.
+            // This patch should ensure that new name updates get into the block chain
+            // within reasonable time in case heavy miners leave the network.
+            if (pblock->nTime - pindexLast->nTime > nTargetSpacing*6)
+                return nProofOfWorkLimit;
+            }
+        }
         return pindexLast->nBits;
     }
 
