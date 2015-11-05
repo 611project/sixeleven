@@ -879,23 +879,23 @@ unsigned int static GetNextWorkRequired(const CBlockIndex* pindexLast, const CBl
             }
         }
         // Special rule for mainnet after 05 Nov 2016:
-        if (pblock->nTime > 1446678000)
-        {
+//        if (pblock->nTime > 1446678000)
+//        {
             // If the new block's timestamp is more than 6* 5 minutes
             // then allow mining of a min-difficulty block.
             // This patch should ensure that new name updates get into the block chain
             // within reasonable time in case heavy miners leave the network.
-            if (pblock->nTime - pindexLast->nTime > nTargetSpacing*6)
-                return nProofOfWorkLimit;
-            else
-            {
+//            if (pblock->nTime - pindexLast->nTime > nTargetSpacing*6)
+//                return nProofOfWorkLimit;
+//            else
+//            {
                 // Return the last non-special-min-difficulty-rules-block
-                const CBlockIndex* pindex = pindexLast;
-                while (pindex->pprev && pindex->nHeight % nInterval != 0 && pindex->nBits == nProofOfWorkLimit)
-                    pindex = pindex->pprev;
-                return pindex->nBits;
-            }
-        }
+//                const CBlockIndex* pindex = pindexLast;
+//                while (pindex->pprev && pindex->nHeight % nInterval != 0 && pindex->nBits == nProofOfWorkLimit)
+//                    pindex = pindex->pprev;
+//                return pindex->nBits;
+//            }
+//        }
         // original rule
         return pindexLast->nBits;
     }
