@@ -878,24 +878,49 @@ unsigned int static GetNextWorkRequired(const CBlockIndex* pindexLast, const CBl
                 return pindex->nBits;
             }
         }
-        // Special rule for mainnet after 05 Nov 2016:
-//        if (pblock->nTime > 1446678000)
-//        {
-            // If the new block's timestamp is more than 6* 5 minutes
-            // then allow mining of a min-difficulty block.
+        // Special rule for mainnet until 6-11 2016
+        if (pblock->nTime < 1465618260)
+        {
+            // If the new block's timestamp is more than nTargetTimespan
+            // then force adjusting the difficulty factor now.
             // This patch should ensure that new name updates get into the block chain
-            // within reasonable time in case heavy miners leave the network.
-//            if (pblock->nTime - pindexLast->nTime > nTargetSpacing*6)
-//                return nProofOfWorkLimit;
-//            else
-//            {
-                // Return the last non-special-min-difficulty-rules-block
-//                const CBlockIndex* pindex = pindexLast;
-//                while (pindex->pprev && pindex->nHeight % nInterval != 0 && pindex->nBits == nProofOfWorkLimit)
-//                    pindex = pindex->pprev;
-//                return pindex->nBits;
-//            }
-//        }
+            // within reasonable time in case big miners leave the network.
+            // Hopefully this code is no longer needed soon!
+            if (pblock->nTime - pindexLast->nTime > nTargetSpacing*48)
+            {
+                  // workaround: code duplication
+                  int nBlocksBack = nInterval-1;
+                  if(pindexLast->nHeight >= hooks->GetFullRetargetStartBlock() && ((pindexLast->nHeight+1) > nInterval))
+                      nBlocksBack = nInterval;
+
+                  // go back by what we want to be nTargetTimespan worth of blocks
+                  const CBlockIndex* pindexFirst = pindexLast;
+                  for (int i = 0; pindexFirst && i < nBlocksBack; i++)
+                      pindexFirst = pindexFirst->pprev;
+                  assert(pindexFirst);
+
+                  // enforce new adjustment step
+                  int64 nActualTimespan = pindexLast->GetBlockTime() - pindexFirst->GetBlockTime();
+                  printf("  nActualTimespan = %"PRI64d"  before bounds\n", nActualTimespan);
+
+                  // retarget
+                  CBigNum bnNew;
+                  bnNew.SetCompact(pindexLast->nBits);
+                  bnNew *= nActualTimespan;
+                  bnNew /= nTargetTimespan;
+
+                  if (bnNew > bnProofOfWorkLimit)
+                     bnNew = bnProofOfWorkLimit;
+
+                  /// debug print
+                  printf("GetNextWorkRequired TIMEOUT-ENFORCED RETARGET\n");
+                  printf("nTargetTimespan = %"PRI64d"    nActualTimespan = %"PRI64d"\n", nTargetTimespan, nActualTimespan);
+                  printf("Before: %08x  %s\n", pindexLast->nBits, CBigNum().SetCompact(pindexLast->nBits).getuint256().ToString().c_str());
+                  printf("After:  %08x  %s\n", bnNew.GetCompact(), bnNew.getuint256().ToString().c_str());
+
+                  return bnNew.GetCompact();
+            }
+        }
         // original rule
         return pindexLast->nBits;
     }
@@ -906,7 +931,7 @@ unsigned int static GetNextWorkRequired(const CBlockIndex* pindexLast, const CBl
     if(pindexLast->nHeight >= hooks->GetFullRetargetStartBlock() && ((pindexLast->nHeight+1) > nInterval))
         nBlocksBack = nInterval;
 
-    // Go back by what we want to be 14 days worth of blocks
+    // Go back by what we want to be nTargetTimespan worth of blocks
     const CBlockIndex* pindexFirst = pindexLast;
     for (int i = 0; pindexFirst && i < nBlocksBack; i++)
         pindexFirst = pindexFirst->pprev;
