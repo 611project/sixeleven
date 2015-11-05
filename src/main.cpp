@@ -881,40 +881,25 @@ unsigned int static GetNextWorkRequired(const CBlockIndex* pindexLast, const CBl
         // Special rule for mainnet until 6-11 2016
         if (pblock->nTime < 1465618260)
         {
-            // If the new block's timestamp is more than nTargetTimespan
-            // then force adjusting the difficulty factor now.
+            // If the new block's timestamp is more than two times of nTargetTimespan
+            // then force to reduce the difficulty factor now.
             // This patch should ensure that new name updates get into the block chain
             // within reasonable time in case big miners leave the network.
             // Hopefully this code is no longer needed soon!
-            if (pblock->nTime - pindexLast->nTime > nTargetSpacing*48)
+            if (pblock->nTime - pindexLast->nTime > (nTargetTimespan * 2))
             {
-                  // workaround: code duplication
-                  int nBlocksBack = nInterval-1;
-                  if(pindexLast->nHeight >= hooks->GetFullRetargetStartBlock() && ((pindexLast->nHeight+1) > nInterval))
-                      nBlocksBack = nInterval;
-
-                  // go back by what we want to be nTargetTimespan worth of blocks
-                  const CBlockIndex* pindexFirst = pindexLast;
-                  for (int i = 0; pindexFirst && i < nBlocksBack; i++)
-                      pindexFirst = pindexFirst->pprev;
-                  assert(pindexFirst);
-
-                  // enforce new adjustment step
-                  int64 nActualTimespan = pindexLast->GetBlockTime() - pindexFirst->GetBlockTime();
-                  printf("  nActualTimespan = %"PRI64d"  before bounds\n", nActualTimespan);
-
-                  // retarget
+                  // sorry, it did not work out - lets enforce a retarget the hard way
                   CBigNum bnNew;
                   bnNew.SetCompact(pindexLast->nBits);
-                  bnNew *= nActualTimespan;
-                  bnNew /= nTargetTimespan;
+                  bnNew *= ((pblock->nTime - pindexLast->nTime) / nTargetSpacing);
+                  bnNew *= ((pblock->nTime - pindexLast->nTime) / nTargetTimespan);
+                  bnNew *= ((pblock->nTime - pindexLast->nTime) / nTargetTimespan);
 
                   if (bnNew > bnProofOfWorkLimit)
                      bnNew = bnProofOfWorkLimit;
 
                   /// debug print
                   printf("GetNextWorkRequired TIMEOUT-ENFORCED RETARGET\n");
-                  printf("nTargetTimespan = %"PRI64d"    nActualTimespan = %"PRI64d"\n", nTargetTimespan, nActualTimespan);
                   printf("Before: %08x  %s\n", pindexLast->nBits, CBigNum().SetCompact(pindexLast->nBits).getuint256().ToString().c_str());
                   printf("After:  %08x  %s\n", bnNew.GetCompact(), bnNew.getuint256().ToString().c_str());
 
