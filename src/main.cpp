@@ -887,7 +887,16 @@ unsigned int static GetNextWorkRequired(const CBlockIndex* pindexLast, const CBl
             // within reasonable time in case heavy miners leave the network.
             if (pblock->nTime - pindexLast->nTime > nTargetSpacing*6)
                 return nProofOfWorkLimit;
+            else
+            {
+                // Return the last non-special-min-difficulty-rules-block
+                const CBlockIndex* pindex = pindexLast;
+                while (pindex->pprev && pindex->nHeight % nInterval != 0 && pindex->nBits == nProofOfWorkLimit)
+                    pindex = pindex->pprev;
+                return pindex->nBits;
+            }
         }
+        // original rule
         return pindexLast->nBits;
     }
 
