@@ -887,7 +887,6 @@ unsigned int static GetNextWorkRequired(const CBlockIndex* pindexLast, const CBl
             // within reasonable time in case heavy miners leave the network.
             if (pblock->nTime - pindexLast->nTime > nTargetSpacing*6)
                 return nProofOfWorkLimit;
-            }
         }
         return pindexLast->nBits;
     }
