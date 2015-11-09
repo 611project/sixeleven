@@ -879,33 +879,33 @@ unsigned int static GetNextWorkRequired(const CBlockIndex* pindexLast, const CBl
             }
         }
         // Special rule for mainnet until 6-11 2016
-        if (pblock->nTime < 1465618260)
-        {
+//        if (pblock->nTime < 1465618260)
+//        {
             // If the new block's timestamp is more than two times of nTargetTimespan
             // then force to reduce the difficulty factor now.
             // This patch should ensure that new name updates get into the block chain
             // within reasonable time in case big miners leave the network.
             // Hopefully this code is no longer needed soon!
-            if (pblock->nTime - pindexLast->nTime > (nTargetTimespan * 2))
-            {
+//            if (pblock->nTime - pindexLast->nTime > (nTargetTimespan * 2))
+//            {
                   // sorry, it did not work out - lets enforce a retarget the hard way
-                  CBigNum bnNew;
-                  bnNew.SetCompact(pindexLast->nBits);
-                  bnNew *= ((pblock->nTime - pindexLast->nTime) / nTargetSpacing);
-                  bnNew *= ((pblock->nTime - pindexLast->nTime) / nTargetTimespan);
-                  bnNew *= ((pblock->nTime - pindexLast->nTime) / nTargetTimespan);
+//                  CBigNum bnNew;
+//                  bnNew.SetCompact(pindexLast->nBits);
+//                  bnNew *= ((pblock->nTime - pindexLast->nTime) / nTargetSpacing);
+//                  bnNew *= ((pblock->nTime - pindexLast->nTime) / nTargetTimespan);
+//                  bnNew *= ((pblock->nTime - pindexLast->nTime) / nTargetTimespan);
 
-                  if (bnNew > bnProofOfWorkLimit)
-                     bnNew = bnProofOfWorkLimit;
+//                  if (bnNew > bnProofOfWorkLimit)
+//                     bnNew = bnProofOfWorkLimit;
 
                   /// debug print
-                  printf("GetNextWorkRequired TIMEOUT-ENFORCED RETARGET\n");
-                  printf("Before: %08x  %s\n", pindexLast->nBits, CBigNum().SetCompact(pindexLast->nBits).getuint256().ToString().c_str());
-                  printf("After:  %08x  %s\n", bnNew.GetCompact(), bnNew.getuint256().ToString().c_str());
-
-                  return bnNew.GetCompact();
-            }
-        }
+//                  printf("GetNextWorkRequired TIMEOUT-ENFORCED RETARGET\n");
+//                  printf("Before: %08x  %s\n", pindexLast->nBits, CBigNum().SetCompact(pindexLast->nBits).getuint256().ToString().c_str());
+//                  printf("After:  %08x  %s\n", bnNew.GetCompact(), bnNew.getuint256().ToString().c_str());
+//
+//                  return bnNew.GetCompact();
+//            }
+//        }
         // original rule
         return pindexLast->nBits;
     }
