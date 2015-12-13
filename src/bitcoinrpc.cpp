@@ -631,6 +631,26 @@ Value getinfo(const Array& params, bool fHelp)
     return obj;
 }
 
+Value getmininginfo(const Array& params, bool fHelp)
+{
+    if (fHelp || params.size() != 0)
+        throw runtime_error(
+            "getmininginfo\n"
+            "Returns an object containing mining-related information.");
+
+    Object obj;
+    obj.push_back(Pair("blocks",        (int)nBestHeight));
+    obj.push_back(Pair("currentblocksize",(uint64_t)nLastBlockSize));
+    obj.push_back(Pair("currentblocktx",(uint64_t)nLastBlockTx));
+    obj.push_back(Pair("difficulty",    (double)GetDifficulty()));
+    obj.push_back(Pair("errors",        GetWarnings("statusbar")));
+    obj.push_back(Pair("generate",      GetBoolArg("-gen")));
+    obj.push_back(Pair("genproclimit",  (int)GetArg("-genproclimit", -1)));
+    obj.push_back(Pair("hashespersec",  gethashespersec(params, false)));
+    obj.push_back(Pair("pooledtx",      (uint64_t)nPooledTx));
+    obj.push_back(Pair("testnet",       fTestNet));
+    return obj;
+}
 
 Value getnewaddress(const Array& params, bool fHelp)
 {
@@ -3411,6 +3431,7 @@ pair<string, rpcfn_type> pCallTable[] =
     make_pair("setgenerate",           &setgenerate),
     make_pair("gethashespersec",       &gethashespersec),
     make_pair("getinfo",               &getinfo),
+    make_pair("getmininginfo",         &getmininginfo),
     make_pair("getnewaddress",         &getnewaddress),
     make_pair("getaccountaddress",     &getaccountaddress),
     make_pair("setaccount",            &setaccount),
@@ -3479,6 +3500,7 @@ string pAllowInSafeMode[] =
     "setgenerate",
     "gethashespersec",
     "getinfo",
+    "getmininginfo",
     "getnewaddress",
     "getaccountaddress",
     "setlabel",

@@ -530,8 +530,11 @@ bool CTransaction::AcceptToMemoryPool(bool fCheckInputs, bool fLimitFree, bool* 
                                pfMissingInputs);
 }
 
+uint64 nPooledTx = 0;
+
 bool CTransaction::AddToMemoryPoolUnchecked()
 {
+    printf("AcceptToMemoryPoolUnchecked(): size %lu\n",  mapTransactions.size());
     // Add to memory pool without checking anything.  Don't call this directly,
     // call AcceptToMemoryPool to properly check the transaction first.
     CRITICAL_BLOCK(cs_mapTransactions)
@@ -541,6 +544,7 @@ bool CTransaction::AddToMemoryPoolUnchecked()
         for (int i = 0; i < vin.size(); i++)
             mapNextTx[vin[i].prevout] = CInPoint(&mapTransactions[hash], i);
         nTransactionsUpdated++;
+        ++nPooledTx;
     }
     return true;
 }
@@ -557,6 +561,7 @@ bool CTransaction::RemoveFromMemoryPool()
             mapNextTx.erase(txin.prevout);
         mapTransactions.erase(GetHash());
         nTransactionsUpdated++;
+        --nPooledTx;
     }
     return true;
 }
@@ -3395,6 +3400,9 @@ void CBlock::SetNull()
     auxpow.reset();
 }
 
+uint64 nLastBlockTx = 0;
+uint64 nLastBlockSize = 0;
+
 CBlock* CreateNewBlock(CReserveKey& reservekey)
 {
     CBlockIndex* pindexPrev = pindexBest;
@@ -3507,6 +3515,7 @@ skipTransaction:;
         // Collect transactions into block
         map<uint256, CTxIndex> mapTestPool;
         uint64 nBlockSize = 1000;
+        uint64 nBlockTx = 0;
         int nBlockSigOps = 100;
         while (!mapPriority.empty())
         {
@@ -3551,6 +3560,7 @@ skipTransaction:;
             pblock->vtx.push_back(tx);
             nBlockSize += nTxSize;
             nBlockSigOps += nTxSigOps;
+            ++nBlockTx;
 
             // Add transactions that depend on this one to the priority queue
             uint256 hash = tx.GetHash();
@@ -3567,6 +3577,11 @@ skipTransaction:;
                 }
             }
         }
+
+        nLastBlockTx = nBlockTx;
+        nLastBlockSize = nBlockSize;
+        printf("CreateNewBlock(): total size %lu\n", nBlockSize);
+
     }
     pblock->vtx[0].vout[0].nValue = GetBlockValue(pindexPrev->nHeight+1, nFees);
 
