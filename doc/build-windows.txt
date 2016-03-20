@@ -59,5 +59,4 @@ http://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win32/
 (4.2) compile 611 with statically linked libraries
 	qmake "RELEASE=1 USE_UPNP=1" 611-qt.pro
 	mingw32-make -j4
-	
-	
+
