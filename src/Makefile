@@ -8,15 +8,19 @@ MINGW=$(shell uname -s|grep -i mingw32)
 # Link boost statically
 DEFS += -DBOOST_THREAD_USE_LIB
 
+#INCLUDEPATHS= \
+#	-I../libs/openssl-1.0.1i/include \
+#	-I../libs/db-4.7.25.NC/build_unix \
+#	-I../libs/boost_1_50_0
 INCLUDEPATHS= \
-	-I../libs/openssl-1.0.1i/include \
-	-I../libs/db-4.7.25.NC/build_unix \
-	-I../libs/boost_1_50_0
+	-I../contrib/db48/include
 
+#LIBPATHS= \
+#	-L../libs/openssl-1.0.1i \
+#	-L../libs/db-4.7.25.NC/build_unix \
+#	-L../libs/boost_1_50_0/stage/lib
 LIBPATHS= \
-	-L../libs/openssl-1.0.1i \
-	-L../libs/db-4.7.25.NC/build_unix \
-	-L../libs/boost_1_50_0/stage/lib
+	-L../contrib/db48/lib
 
 LIBBOOST_SUFFIX=
 
@@ -45,7 +49,6 @@ LIBS= \
 		# Linux-specific
 		LIBS+= \
 			-Wl,-Bdynamic \
-			-l gthread-2.0 \
 			-l z \
 			-l dl \
 			-l pthread
@@ -64,7 +67,6 @@ LIBS= \
 		# Linux-specific
 		LIBS+= \
 			-Wl,-Bdynamic \
-			-l gthread-2.0 \
 			-l z \
 			-l dl \
 			-l pthread
