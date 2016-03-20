@@ -14,7 +14,7 @@ The last is a normal bitcoin-like transaction that does not affect the name.
 
 A transaction can have a name operation associated with it.  An operation can reserve (name\_new), initialize (name\_firstupdate) or update (name\_update) a name/value pair.
 
-The name\_firstupdate transaction has a network fee.  The network fees represents 611s (NC) that are destroyed.  This is in addition to the bitcoin-like miner transaction fees.
+The name\_firstupdate transaction has a network fee.  The network fees represents 611s (SIL) that are destroyed.  This is in addition to the bitcoin-like miner transaction fees.
 
 ## Key Operations Detail
 
@@ -32,16 +32,21 @@ The name\_firstupdate transaction has a network fee.  The network fees represent
 
 ## Network fees
 
-The purpose of the network fees is to slow down the initial gold-rush.
+The purpose of the network fees is to slow down the initial gold-rush and to make it profitable for miners to take care on this altcoin.
 
-* Network fees start out at 50 NC per operation at the genesis block
-* Every block, the network fees decreases based on this algorithm, in 1e-8 NC:
-  * res = 500000000 >> floor(nBlock / 8192)
-  * res = res - (res >> 14)*(nBlock % 8192)
-* nBlock is zero at the genesis block
-* This is a decrease of 50% every 8192 blocks (about two months)
-* As 50 NC are generated per block, the maximum number of registrations in the first 8192 blocks is therefore 2/3 of 8192, which is 5461
-* Difficulty starts at 512
+* Standard network fee is 6.11 cent
+       int64 nStart = 611 * CENT / 100;
+* It will decrease by factor two every 2^18 or 262144 blocks
+       int64 nNetFee = nStart >> (nHeight >> 18);
+       nNetFee -= (nNetFee >> 19) * (nHeight % 262144);
+* At the very early beginning it was fixed
+       if (nHeight <= 10110)
+           nNetFee = 611 * CENT / 100;
+       if (nHeight <= 2880)
+           nNetFee = 611 * CENT / 1000;
+       if (fTestNet)
+             nNetFee = 1 * CENT;
+       return nNetFee;
 
 ## Validation
 
@@ -64,6 +69,6 @@ One of the outputs of a name\_firstupdate or name\_update transaction is lost (c
 
 The name is normally interpreted as a UTF-8 string composed of several slash-separated substrings.  The first element is a application specifier.
 
-For DNS, the first element shall be "d" and there are exactly two elements.  Mapping into the .bit domain is simply: d/xyz => xyz.bit .  The value is interpreted as a zone specification.  It is recommended that names stop serving 1000 blocks before expiration, as a signal to prevent a forgetful registrant from losing the domain immediately after it expires.
+For DNS, the first element shall be "d" and there are exactly two elements.  Mapping into the .611.to domain is simply: d/xyz => xyz.611.to .  The value is interpreted as a zone specification.  It is recommended that names stop serving about 2000 blocks before expiration, as a signal to prevent a forgetful registrant from losing the domain immediately after it expires.
 
 For personal public name, the first element shall be "p" and there are exactly two elements.  The value is interpreted as a json encoded hash.  The "key" element of the cash contains PGP encoded keys.
