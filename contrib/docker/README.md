@@ -58,3 +58,13 @@ The easiest method to configure the 611 (SixEleven) server is to pass arguments 
 ```
 $ docker run --name sixeleven-node fflo/sixeleven 611d -proxy=127.0.0.1:9050
 ```
+
+**Debug / Logfile**
+
+By default, 611 (SixEleven) service 611d will dump any log information to the Docker logs. To debug use:
+
+Warning: In case you did not define $SIXELEVEN_RPC_USER and $SIXELEVEN_RPC_PASSWORD, on first init a random password for rpc access will be generated. The output of the 611.conf configuration file will be dumped to the Docker logs on startup.
+
+```
+$ docker logs -t sixeleven-node
+```
