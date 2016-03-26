@@ -46,8 +46,8 @@ http://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win32/
 
 (4) Qt
 (4.1) prepare Qt
-	set INCLUDE=libpng-1.6.18;C:\deps\openssl-1.0.2d\include
-	set LIB=libpng-1.6.18\.libs;C:\deps\openssl-1.0.2d
+	set INCLUDE=libpng-1.6.18;C:\deps\openssl-1.0.2g\include
+	set LIB=libpng-1.6.18\.libs;C:\deps\openssl-1.0.2g
 	cd C:\deps\Qt-5.4.2\bin
 	configure.bat -release -opensource -confirm-license -static -make libs -no-sql-sqlite -no-opengl -system-zlib -qt-pcre -no-icu -no-gif -system-libpng -no-libjpeg -no-freetype -no-angle -no-vcproj -openssl -no-dbus -no-audio-backend -no-wmf-backend -no-qml-debug
 	mingw32-make
