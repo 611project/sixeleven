@@ -91,8 +91,8 @@ win32: {
     MINIUPNPC_LIB_PATH = ../../deps/miniupnpc-1.9.20150206/miniupnpc
 	BDB_INCLUDE_PATH = ../../deps/db-4.8.30.NC/build_unix
 	BDB_LIB_PATH = ../../deps/db-4.8.30.NC/build_unix
-	OPENSSL_INCLUDE_PATH = ../../deps/openssl-1.0.2d/include
-	OPENSSL_LIB_PATH = ../../deps/openssl-1.0.2d
+	OPENSSL_INCLUDE_PATH = ../../deps/openssl-1.0.2g/include
+	OPENSSL_LIB_PATH = ../../deps/openssl-1.0.2g
 	BOOST_INCLUDE_PATH = ../../deps/boost_1_59_0
 	BOOST_LIB_PATH = ../../deps/boost_1_59_0/stage/lib
 }
