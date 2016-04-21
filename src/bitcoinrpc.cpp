@@ -2245,46 +2245,21 @@ Value getworkaux(const Array& params, bool fHelp)
     }
 }
 
-Value getblocktemplate(const Array& params, bool fHelp)
+Value getmemorypool(const Array& params, bool fHelp)
 {
     if (fHelp || params.size() > 1)
         throw runtime_error(
-            "getblocktemplate [params]\n"
-            "Returns data needed to construct a block to work on:\n"
+            "getmemorypool [data]\n"
+            "If [data] is not specified, returns data needed to construct a block to work on:\n"
             "  \"version\" : block version\n"
             "  \"previousblockhash\" : hash of current highest block\n"
             "  \"transactions\" : contents of non-coinbase transactions that should be included in the next block\n"
-            "  \"coinbaseaux\" : data that should be included in coinbase\n"
             "  \"coinbasevalue\" : maximum allowable input to coinbase transaction, including the generation award and transaction fees\n"
-            "  \"target\" : hash target\n"
-            "  \"mintime\" : minimum timestamp appropriate for next block\n"
-            "  \"curtime\" : current timestamp\n"
-            "  \"mutable\" : list of ways the block template may be changed\n"
-            "  \"noncerange\" : range of valid nonces\n"
-            "  \"sigoplimit\" : limit of sigops in blocks\n"
-            "  \"sizelimit\" : limit of block size\n"
+            "  \"time\" : timestamp appropriate for next block\n"
             "  \"bits\" : compressed target of next block\n"
-            "  \"height\" : height of the next block\n"
-            "See https://en.bitcoin.it/wiki/BIP_0022 for full specification.");
+            "If [data] is specified, tries to solve the block and returns true if it was successful.");
 
-    std::string strMode = "template";
-    if (params.size() > 0)
-    {
-        const Object& oparam = params[0].get_obj();
-        const Value& modeval = find_value(oparam, "mode");
-        if (modeval.type() == str_type)
-            strMode = modeval.get_str();
-        else if (modeval.type() == null_type)
-        {
-            /* Do nothing */
-        }
-        else
-            throw JSONRPCError(-8, "Invalid mode");
-    }
-
-    if (strMode != "template")
-        throw JSONRPCError(-8, "Invalid mode");
-
+    if (params.size() == 0)
     {
         if (vNodes.empty())
             throw JSONRPCError(RPC_CLIENT_NOT_CONNECTED, "611 is not connected!");
@@ -2319,76 +2294,22 @@ Value getblocktemplate(const Array& params, bool fHelp)
         pblock->nNonce = 0;
 
         Array transactions;
-        map<uint256, int64_t> setTxIndex;
-        int i = 0;
-        CTxDB txdb("r");
-        BOOST_FOREACH (CTransaction& tx, pblock->vtx)
-        {
-            uint256 txHash = tx.GetHash();
-            setTxIndex[txHash] = i++;
-
-            if (tx.IsCoinBase())
+        BOOST_FOREACH(CTransaction tx, pblock->vtx) {
+            if(tx.IsCoinBase())
                 continue;
 
-            Object entry;
-
-            CDataStream ssTx(SER_NETWORK, PROTOCOL_VERSION);
+            CDataStream ssTx;
             ssTx << tx;
-            entry.push_back(Pair("data", HexStr(ssTx.begin(), ssTx.end())));
 
-            entry.push_back(Pair("hash", txHash.GetHex()));
-
-            MapPrevTx mapInputs;
-            map<uint256, CTxIndex> mapUnused;
-            bool fInvalid = false;
-            if (tx.FetchInputs(txdb, mapUnused, false, false, mapInputs, fInvalid))
-            {
-                entry.push_back(Pair("fee", (int64_t)(tx.GetValueIn(mapInputs) - tx.GetValueOut())));
-
-                Array deps;
-                BOOST_FOREACH (MapPrevTx::value_type& inp, mapInputs)
-                {
-                    if (setTxIndex.count(inp.first))
-                        deps.push_back(setTxIndex[inp.first]);
-                }
-                entry.push_back(Pair("depends", deps));
-
-                int64_t nSigOps = tx.GetLegacySigOpCount();
-                nSigOps += tx.GetP2SHSigOpCount(mapInputs);
-                entry.push_back(Pair("sigops", nSigOps));
-            }
-
-            transactions.push_back(entry);
-        }
-
-        Object aux;
-        aux.push_back(Pair("flags", HexStr(COINBASE_FLAGS.begin(), COINBASE_FLAGS.end())));
-
-        uint256 hashTarget = CBigNum().SetCompact(pblock->nBits).getuint256();
-
-        static Array aMutable;
-        if (aMutable.empty())
-        {
-            aMutable.push_back("time");
-            aMutable.push_back("transactions");
-            aMutable.push_back("prevblock");
+            transactions.push_back(HexStr(ssTx.begin(), ssTx.end()));
         }
 
         Object result;
         result.push_back(Pair("version", pblock->nVersion));
         result.push_back(Pair("previousblockhash", pblock->hashPrevBlock.GetHex()));
         result.push_back(Pair("transactions", transactions));
-        result.push_back(Pair("coinbaseaux", aux));
         result.push_back(Pair("coinbasevalue", (int64_t)pblock->vtx[0].vout[0].nValue));
-        result.push_back(Pair("target", hashTarget.GetHex()));
-        result.push_back(Pair("mintime", (int64_t)pindexPrev->GetMedianTimePast()+1));
-        result.push_back(Pair("mutable", aMutable));
-        result.push_back(Pair("noncerange", "00000000ffffffff"));
-        result.push_back(Pair("sigoplimit", (int64_t)MAX_BLOCK_SIGOPS));
-        result.push_back(Pair("sizelimit", (int64_t)MAX_BLOCK_SIZE));
-        result.push_back(Pair("curtime", (int64_t)pblock->nTime));
-        // result.push_back(Pair("bits", HexBits(pblock->nBits)));
-        // result.push_back(Pair("height", (int64_t)(pindexPrev->nHeight+1)));
+        result.push_back(Pair("time", (int64_t)pblock->nTime));
 
         union {
             int32_t nBits;
@@ -2397,36 +2318,17 @@ Value getblocktemplate(const Array& params, bool fHelp)
         uBits.nBits = htonl((int32_t)pblock->nBits);
         result.push_back(Pair("bits", HexStr(BEGIN(uBits.cBits), END(uBits.cBits))));
 
-        result.push_back(Pair("height", (int64_t)(pindexPrev->nHeight+1)));
-
         return result;
     }
-}
+    else
+    {
+        // Parse parameters
+        CDataStream ssBlock(ParseHex(params[0].get_str()));
+        CBlock pblock;
+        ssBlock >> pblock;
 
-Value submitblock(const Array& params, bool fHelp)
-{
-    if (fHelp || params.size() < 1 || params.size() > 2)
-        throw runtime_error(
-            "submitblock <hex data> [optional-params-obj]\n"
-            "[optional-params-obj] parameter is currently ignored.\n"
-            "Attempts to submit new block to network.\n"
-            "See https://en.bitcoin.it/wiki/BIP_0022 for full specification.");
-
-    vector<unsigned char> blockData(ParseHex(params[0].get_str()));
-    CDataStream ssBlock(blockData, SER_NETWORK, PROTOCOL_VERSION);
-    CBlock block;
-    try {
-        ssBlock >> block;
+        return ProcessBlock(NULL, &pblock);
     }
-    catch (std::exception &e) {
-        throw JSONRPCError(-22, "Block decode failed");
-    }
-
-    bool fAccepted = ProcessBlock(NULL, &block);
-    if (!fAccepted)
-        throw JSONRPCError(-23, "Block rejected");
-
-    return true;
 }
 
 
@@ -3420,6 +3322,30 @@ Value sendrawtransaction(const Array& params, bool fHelp)
 
 extern CCriticalSection cs_mapTransactions;
 
+Value submitblock(const Array& params, bool fHelp)
+{
+    if (fHelp || params.size() < 1 || params.size() > 2)
+        throw runtime_error(
+            "submitblock <hex data> [optional-params-obj]\n"
+            "[optional-params-obj] parameter is currently ignored.\n"
+            "Attempts to submit new block to network.\n"
+            "See https://en.bitcoin.it/wiki/BIP_0022 for full specification.");
+
+ vector<unsigned char> blockData(ParseHex(params[0].get_str()));
+    CDataStream ssBlock(blockData, SER_NETWORK, VERSION);
+    CBlock block;
+    try {
+        ssBlock >> block;
+    }
+    catch (std::exception &e) {
+        throw JSONRPCError(-22, "Block decode failed");
+}
+   bool fAccepted = ProcessBlock(NULL, &block);
+     if (!fAccepted)
+         throw JSONRPCError(-23, "Block rejected");
+ 
+     return true;
+}
 
 Value getrawmempool(const Array& params, bool fHelp)
 {
@@ -3566,7 +3492,7 @@ pair<string, rpcfn_type> pCallTable[] =
     make_pair("buildmerkletree",       &buildmerkletree),
     make_pair("listaccounts",          &listaccounts),
     make_pair("settxfee",              &settxfee),
-    make_pair("getblocktemplate",      &getblocktemplate),
+    make_pair("getmemorypool",         &getmemorypool),
     make_pair("submitblock",           &submitblock),
     make_pair("setmininput",           &setmininput),
     make_pair("dumpprivkey",           &dumpprivkey),
@@ -3615,7 +3541,7 @@ string pAllowInSafeMode[] =
     "getwork",
     "getworkaux",
     "getauxblock",
-    "getblocktemplate",
+    "getmemorypool",
     "submitblock",
     "dumpprivkey",
     "getrawmempool",
@@ -4226,7 +4152,7 @@ void ThreadRPCServer2(void* parg)
             if (valMethod.type() != str_type)
                 throw JSONRPCError(RPC_INVALID_REQUEST, "Method must be a string");
             string strMethod = valMethod.get_str();
-            if (strMethod != "getwork" && strMethod != "getworkaux" && strMethod != "getauxblock" && strMethod != "buildmerkletree" && strMethod != "getblocktemplate")
+            if (strMethod != "getwork" && strMethod != "getworkaux" && strMethod != "getauxblock" && strMethod != "buildmerkletree" && strMethod != "getmemorypool")
                 printf("ThreadRPCServer method=%s\n", strMethod.c_str());
 
             // Parse params
@@ -4409,7 +4335,6 @@ void RPCConvertValues(const std::string &strMethod, json_spirit::Array &params)
     if (strMethod == "listtransactions"       && n > 1) ConvertTo<boost::int64_t>(params[1]);
     if (strMethod == "listtransactions"       && n > 2) ConvertTo<boost::int64_t>(params[2]);
     if (strMethod == "walletpassphrase"       && n > 1) ConvertTo<boost::int64_t>(params[1]);
-    if (strMethod == "getblocktemplate"       && n > 0) ConvertTo<Object>(params[0]);
     if (strMethod == "getworkaux"             && n > 2) ConvertTo<boost::int64_t>(params[2]);
     if (strMethod == "listaccounts"           && n > 0) ConvertTo<boost::int64_t>(params[0]);
     if (strMethod == "getblockbycount"        && n > 0) ConvertTo<boost::int64_t>(params[0]);
