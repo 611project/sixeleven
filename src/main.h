@@ -36,8 +36,10 @@ class CRequestTracker;
 class CNode;
 class CBlockIndex;
 class CHooks;
-
 class CAuxPow;
+
+static const char* pszP2SH = "/P2SH/";
+static const CScript COINBASE_FLAGS = CScript() << std::vector<unsigned char>(pszP2SH, pszP2SH+strlen(pszP2SH));
 
 /** The maximum allowed size for a serialized block, in bytes (network rule) */
 static const unsigned int MAX_BLOCK_SIZE = 1000000;
@@ -64,11 +66,6 @@ static const int fHaveUPnP = true;
 #else
 static const int fHaveUPnP = false;
 #endif
-
-
-
-
-
 
 extern CCriticalSection cs_main;
 extern CMapBlockIndex mapBlockIndex;
@@ -105,10 +102,7 @@ extern int nLimitProcessors;
 extern int fMinimizeToTray;
 extern int fMinimizeOnClose;
 extern int fUseUPnP;
-
-
 extern CHooks* hooks;
-
 
 class CReserveKey;
 class CTxDB;
@@ -144,15 +138,6 @@ std::string GetWarnings(std::string strFor);
 /** Retrieve a transaction (from memory pool, or from disk, if possible) */
 bool GetTransaction(const uint256 &hash, CTransaction &txOut, uint256 &hashBlock /*, bool fAllowSlow = false*/  );
 
-
-
-
-
-
-
-
-
-
 bool GetWalletFile(CWallet* pwallet, std::string &strWalletFileOut);
 
 template<typename T>
@@ -168,7 +153,6 @@ bool WriteSetting(const std::string& strKey, const T& value)
     }
     return fOk;
 }
-
 
 class CDiskTxPos
 {
@@ -245,9 +229,6 @@ public:
     )
 };
 
-
-
-
 class CInPoint
 {
 public:
@@ -259,9 +240,6 @@ public:
     void SetNull() { ptx = NULL; n = -1; }
     bool IsNull() const { return (ptx == NULL && n == -1); }
 };
-
-
-
 
 class COutPoint
 {
