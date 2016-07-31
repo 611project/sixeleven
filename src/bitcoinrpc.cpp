@@ -677,6 +677,7 @@ Value getmininginfo(const Array& params, bool fHelp)
     obj.push_back(Pair("genproclimit",  (int)GetArg("-genproclimit", -1)));
     obj.push_back(Pair("hashespersec",  gethashespersec(params, false)));
     obj.push_back(Pair("pooledtx",      (uint64_t)nPooledTx));
+    //obj.push_back(Pair("pooledtx",      (uint64_t)mempool.size()));
     obj.push_back(Pair("testnet",       fTestNet));
     return obj;
 }
@@ -3410,11 +3411,15 @@ Value sendrawtransaction(const Array& params, bool fHelp)
     if (fHelp || params.size() < 1 || params.size() > 1)
         throw runtime_error(
             "sendrawtransaction <hex string>\n"
-            "Submits raw transaction (serialized, hex-encoded) to local node and network.");
+            "Submits raw transaction (serialized, hex-encoded) to local node and network.\n"
+            "If checkinputs is non-zero, checks the validity of the inputs of the transaction before sending it.");
 
     // parse hex string from parameter
-    vector<unsigned char> txData(ParseHexV(params[0], "parameter"));
+    vector<unsigned char> txData(ParseHex(params[0].get_str()));
     CDataStream ssData(txData, SER_NETWORK, VERSION);
+    bool fCheckInputs = false;
+    if (params.size() > 1)
+        fCheckInputs = (params[1].get_int() != 0);
     CTransaction tx;
 
     // deserialize binary data stream
