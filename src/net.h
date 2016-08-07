@@ -55,7 +55,21 @@ bool StopNode();
 void MapPort(bool fMapPort);
 #endif
 
-
+class CNodeStats
+{
+public:
+    uint64 nServices;
+    int64 nLastSend;
+    int64 nLastRecv;
+    int64 nTimeConnected;
+    std::string addrName;
+    int nVersion;
+    std::string strSubVer;
+    bool fInbound;
+    int64 nReleaseTime;
+    int nStartingHeight;
+    // int nMisbehavior;
+};
 
 
 
@@ -519,6 +533,7 @@ public:
     unsigned int nHeaderStart;
     unsigned int nMessageStart;
     CAddress addr;
+    std::string addrName;
     int nVersion;
     std::string strSubVer;
     bool fClient;
@@ -574,6 +589,7 @@ public:
         nHeaderStart = -1;
         nMessageStart = -1;
         addr = addrIn;
+        addrName = addr.ToStringIPPort();
         nVersion = 0;
         strSubVer = "";
         fClient = false; // set by version message
@@ -968,6 +984,8 @@ public:
     void CancelSubscribe(unsigned int nChannel);
     void CloseSocketDisconnect();
     void Cleanup();
+
+    void copyStats(CNodeStats &stats);
 };
 
 

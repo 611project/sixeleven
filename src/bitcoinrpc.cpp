@@ -564,7 +564,54 @@ Value getconnectioncount(const Array& params, bool fHelp)
             "getconnectioncount\n"
             "Returns the number of connections to other nodes.");
 
+    LOCK(cs_vNodes);
     return (int)vNodes.size();
+}
+
+static void CopyNodeStats(std::vector<CNodeStats>& vstats)
+{
+    vstats.clear();
+
+    LOCK(cs_vNodes);
+    vstats.reserve(vNodes.size());
+    BOOST_FOREACH(CNode* pnode, vNodes) {
+        CNodeStats stats;
+        pnode->copyStats(stats);
+        vstats.push_back(stats);
+    }
+}
+
+Value getpeerinfo(const Array& params, bool fHelp)
+{
+    if (fHelp || params.size() != 0)
+        throw runtime_error(
+            "getpeerinfo\n"
+            "Returns data about each connected network node.");
+
+    vector<CNodeStats> vstats;
+    CopyNodeStats(vstats);
+
+    Array ret;
+
+    BOOST_FOREACH(const CNodeStats& stats, vstats) {
+        Object obj;
+
+        obj.push_back(Pair("addr", stats.addrName));
+        obj.push_back(Pair("services", strprintf("%08"PRI64x, stats.nServices)));
+        obj.push_back(Pair("lastsend", (boost::int64_t)stats.nLastSend));
+        obj.push_back(Pair("lastrecv", (boost::int64_t)stats.nLastRecv));
+        obj.push_back(Pair("conntime", (boost::int64_t)stats.nTimeConnected));
+        obj.push_back(Pair("version", stats.nVersion));
+        obj.push_back(Pair("subver", stats.strSubVer));
+        obj.push_back(Pair("inbound", stats.fInbound));
+        obj.push_back(Pair("releasetime", (boost::int64_t)stats.nReleaseTime));
+        obj.push_back(Pair("height", stats.nStartingHeight));
+        // obj.push_back(Pair("banscore", stats.nMisbehavior));
+
+        ret.push_back(obj);
+    }
+    
+    return ret;
 }
 
 Value getdifficulty(const Array& params, bool fHelp)
@@ -3567,6 +3614,7 @@ pair<string, rpcfn_type> pCallTable[] =
     make_pair("getblocknumber",        &getblocknumber),
     make_pair("getchains",             &getchains),
     make_pair("getconnectioncount",    &getconnectioncount),
+    make_pair("getpeerinfo",           &getpeerinfo),
     make_pair("getdifficulty",         &getdifficulty),
     make_pair("getgenerate",           &getgenerate),
     make_pair("setgenerate",           &setgenerate),
@@ -3637,6 +3685,7 @@ string pAllowInSafeMode[] =
     "getblockcount",
     "getblocknumber",
     "getconnectioncount",
+    "getpeerinfo",
     "getdifficulty",
     "getgenerate",
     "setgenerate",

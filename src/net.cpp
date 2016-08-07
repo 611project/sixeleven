@@ -716,7 +716,23 @@ void CNode::Cleanup()
             CancelSubscribe(nChannel);
 }
 
-
+#undef X
+#define X(name) stats.name = name
+void CNode::copyStats(CNodeStats &stats)
+{
+    X(nServices);
+    X(nLastSend);
+    X(nLastRecv);
+    X(nTimeConnected);
+    X(addrName);
+    X(nVersion);
+    X(strSubVer);
+    X(fInbound);
+    X(nReleaseTime);
+    X(nStartingHeight);
+    // X(nMisbehavior);
+}
+#undef X
 
 
 
