@@ -564,7 +564,7 @@ Value getconnectioncount(const Array& params, bool fHelp)
             "getconnectioncount\n"
             "Returns the number of connections to other nodes.");
 
-    LOCK(cs_vNodes);
+    CRITICAL_BLOCK(cs_vNodes);
     return (int)vNodes.size();
 }
 
@@ -572,7 +572,7 @@ static void CopyNodeStats(std::vector<CNodeStats>& vstats)
 {
     vstats.clear();
 
-    LOCK(cs_vNodes);
+    CRITICAL_BLOCK(cs_vNodes);
     vstats.reserve(vNodes.size());
     BOOST_FOREACH(CNode* pnode, vNodes) {
         CNodeStats stats;
