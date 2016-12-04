@@ -45,7 +45,7 @@ contains(RELEASE, 1) {
     macx:QMAKE_MACOSX_DEPLOYMENT_TARGET=10.7
     !win32:!macx {
         # Linux: extra security (see: https://wiki.debian.org/Hardening)
-	LIBS += -Wl,-z,relro -Wl,-z,now
+        LIBS += -Wl,-z,relro -Wl,-z,now
     }
 }
 
@@ -91,8 +91,8 @@ win32: {
     MINIUPNPC_LIB_PATH = ../../deps/miniupnpc-1.9.20150206/miniupnpc
 	BDB_INCLUDE_PATH = ../../deps/db-4.8.30.NC/build_unix
 	BDB_LIB_PATH = ../../deps/db-4.8.30.NC/build_unix
-	OPENSSL_INCLUDE_PATH = ../../deps/openssl-1.0.2g/include
-	OPENSSL_LIB_PATH = ../../deps/openssl-1.0.2g
+	OPENSSL_INCLUDE_PATH = ../../deps/openssl-1.0.2h/include
+	OPENSSL_LIB_PATH = ../../deps/openssl-1.0.2h
 	BOOST_INCLUDE_PATH = ../../deps/boost_1_59_0
 	BOOST_LIB_PATH = ../../deps/boost_1_59_0/stage/lib
 }
@@ -453,10 +453,12 @@ macx: {
 contains(RELEASE, 1) {
     !win32:!macx {
         # Linux: turn dynamic linking back on for c/c++ runtime libraries
+        # Note: compiling RELEASE mode on Linux requires support for 
+        #       static linked libraries.
         LIBS += -Wl,-Bdynamic
-	QMAKE_LFLAGS += -static -static-libgcc
+        QMAKE_LFLAGS += -static -static-libgcc
         # build against contrib db48 on Linux if available
-	BDB_INCLUDE_PATH = contrib/db48/include
+        BDB_INCLUDE_PATH = contrib/db48/include
         BDB_LIB_PATH = contrib/db48/lib
     }
 }
