@@ -44,8 +44,8 @@ contains(RELEASE, 1) {
     # Mac: compile for maximum compatibility (10.7, 64-bit)
     macx:QMAKE_MACOSX_DEPLOYMENT_TARGET=10.7
     !win32:!macx {
-        # Linux: static link and extra security (see: https://wiki.debian.org/Hardening)
-        LIBS += -Wl,-Bstatic -Wl,-z,relro -Wl,-z,now
+        # Linux: extra security (see: https://wiki.debian.org/Hardening)
+	LIBS += -Wl,-z,relro -Wl,-z,now
     }
 }
 
@@ -91,8 +91,8 @@ win32: {
     MINIUPNPC_LIB_PATH = ../../deps/miniupnpc-1.9.20150206/miniupnpc
 	BDB_INCLUDE_PATH = ../../deps/db-4.8.30.NC/build_unix
 	BDB_LIB_PATH = ../../deps/db-4.8.30.NC/build_unix
-	OPENSSL_INCLUDE_PATH = ../../deps/openssl-1.0.2h/include
-	OPENSSL_LIB_PATH = ../../deps/openssl-1.0.2h
+	OPENSSL_INCLUDE_PATH = ../../deps/openssl-1.0.2g/include
+	OPENSSL_LIB_PATH = ../../deps/openssl-1.0.2g
 	BOOST_INCLUDE_PATH = ../../deps/boost_1_59_0
 	BOOST_LIB_PATH = ../../deps/boost_1_59_0/stage/lib
 }
@@ -449,6 +449,18 @@ macx: {
     QMAKE_CXXFLAGS_THREAD += -pthread
 }
 
+
+contains(RELEASE, 1) {
+    !win32:!macx {
+        # Linux: turn dynamic linking back on for c/c++ runtime libraries
+        LIBS += -Wl,-Bdynamic
+	QMAKE_LFLAGS += -static -static-libgcc
+        # build against contrib db48 on Linux if available
+	BDB_INCLUDE_PATH = contrib/db48/include
+        BDB_LIB_PATH = contrib/db48/lib
+    }
+}
+
 # Set libraries and includes at end, to use platform-defined defaults if not overridden
 INCLUDEPATH += $$BOOST_INCLUDE_PATH $$BDB_INCLUDE_PATH $$OPENSSL_INCLUDE_PATH $$QRENCODE_INCLUDE_PATH
 LIBS += $$join(BOOST_LIB_PATH,,-L,) $$join(BDB_LIB_PATH,,-L,) $$join(OPENSSL_LIB_PATH,,-L,) $$join(QRENCODE_LIB_PATH,,-L,)
@@ -458,12 +470,6 @@ win32:LIBS += -lws2_32 -lshlwapi -lmswsock -lole32 -loleaut32 -luuid -lgdi32
 LIBS += -lboost_system$$BOOST_LIB_SUFFIX -lboost_filesystem$$BOOST_LIB_SUFFIX -lboost_program_options$$BOOST_LIB_SUFFIX -lboost_thread$$BOOST_THREAD_LIB_SUFFIX
 win32:LIBS += -lboost_chrono$$BOOST_LIB_SUFFIX
 
-contains(RELEASE, 1) {
-    !win32:!macx {
-        # Linux: turn dynamic linking back on for c/c++ runtime libraries
-        LIBS += -Wl,-Bdynamic
-    }
-}
 
 system($$QMAKE_LRELEASE $$_PRO_FILE_)
 

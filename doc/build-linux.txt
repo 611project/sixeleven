@@ -1,4 +1,4 @@
-HOWTO COMPILE 611 ON LINUX (without GUI) 
+HOWTO COMPILE 611 ON LINUX
 
 (1) using apt-get to setup dependencies 
 -> sudo apt-get install build-essential libssl-dev libboost-all-dev git
@@ -7,17 +7,32 @@ HOWTO COMPILE 611 ON LINUX (without GUI)
 -> git clone https://github.com/fflo/sixeleven.git
 -> cd sixeleven
 
-(3) build 611 (SixEleven)
+(3) build and install 611 (SixEleven)
+(3a) without GUI (Qt)
    611 (wallet) furthermore depends on Berkeley Database libraries.
    You have two options 
-   (3a) RECOMMENED for wallet compatibility:
+   (I) RECOMMENED for wallet compatibility:
        setup db48, compile and link statically
    -> cd contrib && ./build-static-with-db48.sh && cd ..
 
    OR 
-   (3b) USE SYSTEM PREFERRED Berkeley Database libraries 
+   (II) USE SYSTEM PREFERRED Berkeley Database libraries 
    -> sudo apt-get install libdb++-dev libdb-dev
    -> cd src && make && cd ..
 
-(4) to install copy 611d to your local bin directory and strip file
--> sudo cp src/611d /usr/local/bin && strip /usr/local/bin/611d
+   BOTH
+   to install copy 611d to your local bin directory and strip file
+   -> sudo cp src/611d /usr/local/bin && strip /usr/local/bin/611d
+
+
+(3b) with Qt GUI
+   install your preferred Berkeley Database libraries,
+   Qt4 or Qt5 (up to 5.4.x) development libraries and
+   libqrencode development libraries
+   -> sudo apt-get install libdb++-dev libdb-dev \
+        libqt4-dev libqrencode-dev
+   -> qmake "USE_QRCODE=1" 611-qt.pro
+   run the make (optional with -j4 for four processes)
+   -> time make -j4
+   that's it: enjoy your self compiled 611-Qt (app)
+
