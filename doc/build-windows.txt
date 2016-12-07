@@ -23,7 +23,7 @@ http://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win32/
 !! --> open C:\MinGW\msys\1.0\msys.bat SHELL !!
  
 (3) download dependencies and unpack to C:\deps\... :
-(3.1) OpenSSL 1.0.x:
+(3.1) OpenSSL 1.0.2j:
 	./configure mingw
 	make
 (3.2) Berkeley DB 4.8:
@@ -31,23 +31,25 @@ http://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win32/
 	../dist/configure --enable-mingw --enable-cxx --disable-replication
 	make
 (3.3) libPNG:
-	configure --disable-shared
+	configure --enable-static --disable-shared 
 	make
 	cp .libs/libpng16.a .libs/libpng.a
-
+(3.4) libqrencode:
+        png_CFLAGS="-I/c/deps/libpng-1.6.26" png_LIBS="/c/deps/libpng-1.6.26/.libs/libpng16.a -lz" ./configure --enable-static --enable-shared=no
+        make
 
 !! --> open standard CMD SHELL !!
 
-(3.4) Boost 1.xx.x:
+(3.5) Boost 1.xx.x:
 	bootstrap.bat mingw
 	b2 --build-type=complete --with-chrono --with-filesystem --with-program_options --with-system --with-thread toolset=gcc variant=release link=static threading=multi runtime-link=static stage
-(3.5) MiniUPNP:
+(3.6) MiniUPNP:
 	mingw32-make -f Makefile.mingw init upnpc-static
 
 (4) Qt
 (4.1) prepare Qt
-	set INCLUDE=libpng-1.6.18;C:\deps\openssl-1.0.2h\include
-	set LIB=libpng-1.6.18\.libs;C:\deps\openssl-1.0.2h
+	set INCLUDE=C:\deps\libpng-1.6.26;C:\deps\qrencode-3.4.4;C:\deps\openssl-1.0.2j\include
+	set LIB=C:\deps\libpng-1.6.26\.libs;C:\deps\qrencode-3.4.4\.libs;C:\deps\openssl-1.0.2j
 	cd C:\deps\Qt-5.4.2\bin
 	configure.bat -release -opensource -confirm-license -static -make libs -no-sql-sqlite -no-opengl -system-zlib -qt-pcre -no-icu -no-gif -system-libpng -no-libjpeg -no-freetype -no-angle -no-vcproj -openssl -no-dbus -no-audio-backend -no-wmf-backend -no-qml-debug
 	mingw32-make
@@ -57,6 +59,6 @@ http://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win32/
 	mingw32-make
 
 (4.2) compile 611 with statically linked libraries
-	qmake "RELEASE=1 USE_UPNP=1" 611-qt.pro
+	qmake "RELEASE=1 USE_UPNP=1 USE_QRCODE=1" 611-qt.pro
 	mingw32-make -j4
 
