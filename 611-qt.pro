@@ -84,17 +84,19 @@ macx: {
 win32: {
     QMAKE_CFLAGS += -stdlib=libstdc++
     QMAKE_CXXFLAGS += -DMINIUPNP_STATICLIB
-	# QMAKE_CXXFLAGS += -I../../deps/libpng-1.6.18
-    # QMAKE_LFLAGS += -L../../deps/libpng-1.6.18/.lib
-	QMAKE_LFLAGS += -static -static-libgcc -static-libstdc++
+    QMAKE_CXXFLAGS += -I../../deps/libpng-1.6.26
+    QMAKE_LFLAGS += -L../../deps/libpng-1.6.26/.libs
+    QMAKE_LFLAGS += -static -static-libgcc -static-libstdc++
     MINIUPNPC_INCLUDE_PATH = ../../deps/miniupnpc-1.9.20150206
     MINIUPNPC_LIB_PATH = ../../deps/miniupnpc-1.9.20150206/miniupnpc
-	BDB_INCLUDE_PATH = ../../deps/db-4.8.30.NC/build_unix
-	BDB_LIB_PATH = ../../deps/db-4.8.30.NC/build_unix
-	OPENSSL_INCLUDE_PATH = ../../deps/openssl-1.0.2j/include
-	OPENSSL_LIB_PATH = ../../deps/openssl-1.0.2j
-	BOOST_INCLUDE_PATH = ../../deps/boost_1_59_0
-	BOOST_LIB_PATH = ../../deps/boost_1_59_0/stage/lib
+    BDB_INCLUDE_PATH = ../../deps/db-4.8.30.NC/build_unix
+    BDB_LIB_PATH = ../../deps/db-4.8.30.NC/build_unix
+    QRENCODE_INCLUDE_PATH = ../../deps/qrencode-3.4.4
+    QRENCODE_LIB_PATH = ../../deps/qrencode-3.4.4/.libs 
+    OPENSSL_INCLUDE_PATH = ../../deps/openssl-1.0.2j/include
+    OPENSSL_LIB_PATH = ../../deps/openssl-1.0.2j
+    BOOST_INCLUDE_PATH = ../../deps/boost_1_59_0
+    BOOST_LIB_PATH = ../../deps/boost_1_59_0/stage/lib
 }
 
 # use: qmake "USE_UPNP=1" ( enabled by default; default)
