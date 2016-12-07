@@ -50,7 +50,7 @@ http://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win32/
 (4.1) prepare Qt
 	set INCLUDE=C:\deps\libpng-1.6.26;C:\deps\qrencode-3.4.4;C:\deps\openssl-1.0.2j\include
 	set LIB=C:\deps\libpng-1.6.26\.libs;C:\deps\qrencode-3.4.4\.libs;C:\deps\openssl-1.0.2j
-	cd C:\deps\Qt-5.4.2\bin
+	cd C:\deps\Qt-5.4.2
 	configure.bat -release -opensource -confirm-license -static -make libs -no-sql-sqlite -no-opengl -system-zlib -qt-pcre -no-icu -no-gif -system-libpng -no-libjpeg -no-freetype -no-angle -no-vcproj -openssl -no-dbus -no-audio-backend -no-wmf-backend -no-qml-debug
 	mingw32-make
 	set PATH=C:\deps\Qt-5.4.2\bin;%PATH%
@@ -59,6 +59,6 @@ http://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win32/
 	mingw32-make
 
 (4.2) compile 611 with statically linked libraries
-	qmake "RELEASE=1 USE_UPNP=1 USE_QRCODE=1" 611-qt.pro
+	qmake "RELEASE=1" "USE_UPNP=1" "USE_QRCODE=1" 611-qt.pro
 	mingw32-make -j4
 
