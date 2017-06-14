@@ -37,7 +37,7 @@ BEGIN
             VALUE "FileDescription",    "611-Qt (OSS GUI client for 611)"
             VALUE "FileVersion",        VER_FILEVERSION_STR
             VALUE "InternalName",       "611-qt"
-            VALUE "LegalCopyright",     "2009-2016 The Bitcoin and SixEleven developers"
+            VALUE "LegalCopyright",     "2009-2017 The Bitcoin and SixEleven developers"
             VALUE "LegalTrademarks1",   "Distributed under the MIT/X11 software license, see the accompanying file COPYING or http://www.opensource.org/licenses/mit-license.php."
             VALUE "OriginalFilename",   "611-qt.exe"
             VALUE "ProductName",        "611-Qt"
