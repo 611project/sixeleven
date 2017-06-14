@@ -2710,20 +2710,25 @@ int C611Hooks::LockinHeight()
 bool C611Hooks::Lockin(int nHeight, uint256 hash)
 {
     if (!fTestNet)
-        if ((nHeight == 2016 && hash != uint256("0x0000000491a32a0f19ab047b18a22f369351c6c4304dbf1750aafbe621d0516b")) ||
+        if ((nHeight == 63 && hash != uint256("0x0000012649b2497615aaa202774fa54f159e2a884989c128dea35ef1e147e463")) ||
+                (nHeight ==   126 && hash != uint256("0x0000000a381d2fb713ca218f649773ea8e16e3bd8f02b4e43e0f534c5f5fffdc")) ||
+                (nHeight ==   252 && hash != uint256("0x000000024101a2de2c4a23e4bb797602370a7929947b3efb918371a3c76b11df")) ||
+                (nHeight ==   504 && hash != uint256("0x0000000283c3211c2c8a1fa731ff577291a5b09c2b66f7f2d1f808fa95dc8f4f")) ||
+                (nHeight ==   1008 && hash != uint256("0x000000023770727241d85cdafa659d6779ffe72510781b7a5e5303f0cff58427")) ||
+                (nHeight ==   2016 && hash != uint256("0x0000000491a32a0f19ab047b18a22f369351c6c4304dbf1750aafbe621d0516b")) ||
                 (nHeight ==   4032 && hash != uint256("0x0000000455f87fbc8fd78530f0ccd1db72588d6d19b737f75a2b6ab70a234758")) ||
                 (nHeight ==   6048 && hash != uint256("0x000000012508665fe92f85a0da2aea314bf554cf3553c29bfef63dd1993b2510")) ||
                 (nHeight ==   8064 && hash != uint256("0x00000002348b01281b5dd4f7b88e14f9708e1157cab21e5dfd40569f9b6e739f")) ||
                 (nHeight ==  10080 && hash != uint256("0x00000006d586b7f3674ce14c2aa4db12c8afdc7a1a9c7d9f3c18b6b990c9cc61")) ||
                 (nHeight ==  12096 && hash != uint256("0x000000074ac40bc05d4fe524053ca4f69ae48bed59b68f9baff254d9c667310d")) ||
-                (nHeight ==  14112 && hash != uint256("0x000000054e65e10f90d55a3f9071eecdabfe4106c196f7828f01d3796f42be34")))
-//                (nHeight ==  16128 && hash != uint256("0x000000000aeee824226cb18a76462413179d1b00ac2d0b91b06c660b0323978b")) ||
-//                (nHeight ==  18940 && hash != uint256("0x00000000000087f7fc0c8085217503ba86f796fa4984f7e5a08b6c4c12906c05")) ||
-//                (nHeight ==  30240 && hash != uint256("0xe1c8c862ff342358384d4c22fa6ea5f669f3e1cdcf34111f8017371c3c0be1da")) ||
-//                (nHeight ==  57000 && hash != uint256("0xaa3ec60168a0200799e362e2b572ee01f3c3852030d07d036e0aa884ec61f203")) ||
-//                (nHeight == 112896 && hash != uint256("0x73f880e78a04dd6a31efc8abf7ca5db4e262c4ae130d559730d6ccb8808095bf")) ||
-//                (nHeight == 182000 && hash != uint256("0xd47b4a8fd282f635d66ce34ebbeb26ffd64c35b41f286646598abfd813cba6d9")) ||
-//                (nHeight == 193000 && hash != uint256("0x3b85e70ba7f5433049cfbcf0ae35ed869496dbedcd1c0fafadb0284ec81d7b58")))
+                (nHeight ==  14112 && hash != uint256("0x000000054e65e10f90d55a3f9071eecdabfe4106c196f7828f01d3796f42be34")) ||
+                (nHeight ==  16128 && hash != uint256("0x000000000aeee824226cb18a76462413179d1b00ac2d0b91b06c660b0323978b")) ||
+                (nHeight ==  18940 && hash != uint256("0x000000005fffeb95aa3b1d0d121d9df7b97f3de4343718b88a60417fde71c8b5")) ||
+                (nHeight ==  30240 && hash != uint256("0xdea90d2f67571ff938c919e6d1cb9e7305faa5782cc3285b8f50cb257df21129")) ||
+                (nHeight ==  57007 && hash != uint256("0x68cfce773759f1163b7ceb0083807dc404e062d92773835e635c765549b798a9")) ||
+                (nHeight == 112896 && hash != uint256("0x13219495f7f876c42e3e6fd3094fc912c1777316ab810f594acb8aed0ec5e674")) ||
+                (nHeight == 132022 && hash != uint256("0x9ce3de8f89ca190e8f176432c3073d3c05ded96550d3c66af3642aa83783fd5a")) ||
+                (nHeight == 155011 && hash != uint256("0x86940e1a6e7160d72590982b2dc3a489ee5adf6abc092525cbc0ca6936de26c0")))
             return false;
     return true;
 }
