@@ -23,7 +23,7 @@ http://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win32/
 !! --> open C:\MinGW\msys\1.0\msys.bat SHELL !!
  
 (3) download dependencies and unpack to C:\deps\... :
-(3.1) OpenSSL 1.0.2j:
+(3.1) OpenSSL 1.0.2l:
 	./configure mingw
 	make
 (3.2) Berkeley DB 4.8:
@@ -35,7 +35,7 @@ http://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win32/
 	make
 	cp .libs/libpng16.a .libs/libpng.a
 (3.4) libqrencode:
-        png_CFLAGS="-I/c/deps/libpng-1.6.26" png_LIBS="/c/deps/libpng-1.6.26/.libs/libpng16.a -lz" ./configure --enable-static --enable-shared=no
+        png_CFLAGS="-I/c/deps/libpng-1.6.29" png_LIBS="/c/deps/libpng-1.6.29/.libs/libpng16.a -lz" ./configure --enable-static --enable-shared=no
         make
 
 !! --> open standard CMD SHELL !!
@@ -48,8 +48,8 @@ http://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win32/
 
 (4) Qt
 (4.1) prepare Qt
-	set INCLUDE=C:\deps\libpng-1.6.26;C:\deps\qrencode-3.4.4;C:\deps\openssl-1.0.2j\include
-	set LIB=C:\deps\libpng-1.6.26\.libs;C:\deps\qrencode-3.4.4\.libs;C:\deps\openssl-1.0.2j
+	set INCLUDE=C:\deps\libpng-1.6.29;C:\deps\qrencode-3.4.4;C:\deps\openssl-1.0.2l\include
+	set LIB=C:\deps\libpng-1.6.29\.libs;C:\deps\qrencode-3.4.4\.libs;C:\deps\openssl-1.0.2l
 	cd C:\deps\Qt-5.4.2
 	configure.bat -release -opensource -confirm-license -static -make libs -no-sql-sqlite -no-opengl -system-zlib -qt-pcre -no-icu -no-gif -system-libpng -no-libjpeg -no-freetype -no-angle -no-vcproj -openssl -no-dbus -no-audio-backend -no-wmf-backend -no-qml-debug
 	mingw32-make
