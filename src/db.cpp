@@ -813,8 +813,8 @@ bool LoadAddresses()
 void PrintSettingsToLog()
 {
     printf("fGenerateBitcoins = %d\n", fGenerateBitcoins);
-    printf("nTransactionFee = %"PRI64d"\n", nTransactionFee);
-    printf("nMinimumInputValue = %"PRI64d"\n", nMinimumInputValue);
+    printf("nTransactionFee = %" PRI64d "\n", nTransactionFee);
+    printf("nMinimumInputValue = %" PRI64d "\n", nMinimumInputValue);
     printf("fMinimizeToTray = %d\n", fMinimizeToTray);
     printf("fMinimizeOnClose = %d\n", fMinimizeOnClose);
     printf("fUseProxy = %d\n", fUseProxy);
@@ -875,7 +875,7 @@ void ThreadFlushWalletDB(void* parg)
                         dbenv.lsn_reset(strFile.c_str(), 0);
 
                         mapFileUseCount.erase(mi++);
-                        printf("Flushed %s %"PRI64d"ms\n", walletPath.c_str(), GetTimeMillis() - nStart);
+                        printf("Flushed %s %" PRI64d "ms\n", walletPath.c_str(), GetTimeMillis() - nStart);
                     }
                 }
             }
