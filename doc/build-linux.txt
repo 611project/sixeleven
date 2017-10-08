@@ -13,6 +13,7 @@ HOWTO COMPILE 611 ON LINUX
    You have two options 
    (I) RECOMMENED for wallet compatibility:
        setup db48, compile and link statically
+   -> apt-get install wget
    -> cd contrib && ./build-static-with-db48.sh && cd ..
 
    OR 
