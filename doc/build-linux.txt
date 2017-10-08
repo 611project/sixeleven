@@ -1,6 +1,10 @@
 HOWTO COMPILE 611 ON LINUX
 
-(1) using apt-get to setup dependencies 
+Examples below should work fine on Debian Linux and Ubuntu.
+Feel free to use equivalent packages on your favorite Linux distribution.
+
+(1) using apt-get to setup dependencies
+    hint: use libssl-dev if libssl1.0-dev is not available (on older linux versions) 
 -> sudo apt-get install build-essential libssl1.0-dev libboost-all-dev zlib1g-dev git
 
 (2) grab the source code from github
