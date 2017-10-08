@@ -1,7 +1,7 @@
 HOWTO COMPILE 611 ON LINUX
 
 (1) using apt-get to setup dependencies 
--> sudo apt-get install build-essential libssl-dev libboost-all-dev git
+-> sudo apt-get install build-essential libssl1.0-dev libboost-all-dev zlib1g-dev git
 
 (2) grab the source code from github
 -> git clone https://github.com/fflo/sixeleven.git
