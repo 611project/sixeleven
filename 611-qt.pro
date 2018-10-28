@@ -91,20 +91,21 @@ macx: {
 
 win32: {
     QMAKE_CFLAGS += -stdlib=libstdc++
+	QMAKE_CXXFLAGS += -Wno-narrowing
     QMAKE_CXXFLAGS += -DMINIUPNP_STATICLIB
-    QMAKE_CXXFLAGS += -I../../deps/libpng-1.6.29
-    QMAKE_LFLAGS += -L../../deps/libpng-1.6.29/.libs
+    QMAKE_CXXFLAGS += -I../../deps/libpng
+    QMAKE_LFLAGS += -L../../deps/libpng/.libs
     QMAKE_LFLAGS += -static -static-libgcc -static-libstdc++
-    MINIUPNPC_INCLUDE_PATH = ../../deps/miniupnpc-2.0.20170509
-    MINIUPNPC_LIB_PATH = ../../deps/miniupnpc-2.0.20170509/miniupnpc
+    MINIUPNPC_INCLUDE_PATH = ../../deps/miniupnpc-2.1
+    MINIUPNPC_LIB_PATH = ../../deps/miniupnpc-2.1/miniupnpc
     BDB_INCLUDE_PATH = ../../deps/db-4.8.30.NC/build_unix
     BDB_LIB_PATH = ../../deps/db-4.8.30.NC/build_unix
-    QRENCODE_INCLUDE_PATH = ../../deps/qrencode-3.4.4
-    QRENCODE_LIB_PATH = ../../deps/qrencode-3.4.4/.libs 
-    OPENSSL_INCLUDE_PATH = ../../deps/openssl-1.0.2l/include
-    OPENSSL_LIB_PATH = ../../deps/openssl-1.0.2l
-    BOOST_INCLUDE_PATH = ../../deps/boost_1_59_0
-    BOOST_LIB_PATH = ../../deps/boost_1_59_0/stage/lib
+    QRENCODE_INCLUDE_PATH = ../../deps/qrencode-4.0.2
+    QRENCODE_LIB_PATH = ../../deps/qrencode-4.0.2/.libs 
+    OPENSSL_INCLUDE_PATH = ../../deps/openssl-1.0.2p/include
+    OPENSSL_LIB_PATH = ../../deps/openssl-1.0.2p
+    BOOST_INCLUDE_PATH = ../../deps/boost_1_60_0
+    BOOST_LIB_PATH = ../../deps/boost_1_60_0/stage/lib
 }
 
 # use: qmake "USE_UPNP=1" ( enabled by default; default)
@@ -338,7 +339,7 @@ QMAKE_EXTRA_COMPILERS += TSQM
 # platform specific defaults, if not overridden on command line
 isEmpty(BOOST_LIB_SUFFIX) {
     macx:BOOST_LIB_SUFFIX = -mt
-    win32:BOOST_LIB_SUFFIX = -mgw49-mt-s-1_59
+    win32:BOOST_LIB_SUFFIX = -mgw81-mt-s-1_60
 }
 
 isEmpty(BOOST_THREAD_LIB_SUFFIX) {

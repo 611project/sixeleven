@@ -14,8 +14,8 @@ msys-libtool-bin
 
 Make sure no mingw packages are checked for installation or present from a previous install. Only the above msys packages should be installed. Also make sure that msys-gcc and msys-w32api packages are not installed.
 
-(2) download and install MinGW-builds project toolchain from:
-http://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win32/Personal%20Builds/mingw-builds/4.9.2/threads-posix/dwarf/i686-4.9.2-release-posix-dwarf-rt_v3-rev1.7z/download
+(2) download and install MinGW-builds project toolchain from:https://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win32/Personal%20Builds/mingw-builds/8.1.0/threads-posix/dwarf/
+https://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win32/Personal%20Builds/mingw-builds/8.1.0/threads-posix/dwarf/i686-8.1.0-release-posix-dwarf-rt_v6-rev0.7z/downloadhttp://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win32/Personal%20Builds/mingw-builds/4.9.2/threads-posix/dwarf/i686-4.9.2-release-posix-dwarf-rt_v3-rev1.7z/download
 
  Ensure that mingw-builds bin folder is set in your PATH environment variable. On Windows 7 your path should look something like:
  C:\mingw32\bin;...!!OLDPATH!!...
@@ -23,24 +23,27 @@ http://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win32/
 !! --> open C:\MinGW\msys\1.0\msys.bat SHELL !!
  
 (3) download dependencies and unpack to C:\deps\... :
-(3.1) OpenSSL 1.0.2l:
+(3.1) OpenSSL 1.0.2p:
 	./configure mingw
 	make
 (3.2) Berkeley DB 4.8:
 	cd build_unix
 	../dist/configure --enable-mingw --enable-cxx --disable-replication
 	make
-(3.3) libPNG:
+(3.3) libPNG from GitHub:
+      hint: take care about https://sourceforge.net/p/libpng/bugs/273/
+      - download and apply patch: https://sourceforge.net/p/libpng/bugs/_discuss/thread/376bc3c4/82fd/attachment/dfn.awk.patch
+	  - and maybe some dos2unix for awk scripts in case of errors...
 	configure --enable-static --disable-shared 
 	make
 	cp .libs/libpng16.a .libs/libpng.a
 (3.4) libqrencode:
-        png_CFLAGS="-I/c/deps/libpng-1.6.29" png_LIBS="/c/deps/libpng-1.6.29/.libs/libpng16.a -lz" ./configure --enable-static --enable-shared=no
+        png_CFLAGS="-I/c/deps/libpng" png_LIBS="/c/deps/libpng/.libs/libpng16.a -lz" ./configure --enable-static --enable-shared=no
         make
 
 !! --> open standard CMD SHELL !!
 
-(3.5) Boost 1.xx.x:
+(3.5) Boost 1.60.0:
 	bootstrap.bat mingw
 	b2 --build-type=complete --with-chrono --with-filesystem --with-program_options --with-system --with-thread toolset=gcc variant=release link=static threading=multi runtime-link=static stage
 (3.6) MiniUPNP:
@@ -48,8 +51,8 @@ http://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win32/
 
 (4) Qt
 (4.1) prepare Qt
-	set INCLUDE=C:\deps\libpng-1.6.29;C:\deps\qrencode-3.4.4;C:\deps\openssl-1.0.2l\include
-	set LIB=C:\deps\libpng-1.6.29\.libs;C:\deps\qrencode-3.4.4\.libs;C:\deps\openssl-1.0.2l
+	set INCLUDE=C:\deps\libpng;C:\deps\qrencode-4.0.2;C:\deps\openssl-1.0.2p\include
+	set LIB=C:\deps\libpng\.libs;C:\deps\qrencode-4.0.2\.libs;C:\deps\openssl-1.0.2p
 	cd C:\deps\Qt-5.4.2
 	configure.bat -release -opensource -confirm-license -static -make libs -no-sql-sqlite -no-opengl -system-zlib -qt-pcre -no-icu -no-gif -system-libpng -no-libjpeg -no-freetype -no-angle -no-vcproj -openssl -no-dbus -no-audio-backend -no-wmf-backend -no-qml-debug
 	mingw32-make
