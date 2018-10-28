@@ -1,7 +1,7 @@
-611
+611 [coin]
 ===================
 
-611 is a decentralized key/value registration and transfer system based on *Bitcoin* technology (a decentralized cryptocurrency).
+611 [coin] is a decentralized key/value registration and transfer system based on *Bitcoin* technology (a decentralized cryptocurrency).
 
 As a fork of *Namecoin*, 611 offers a unique blockchain secured and anonymous domain registration service. Blockchain information can be published and accessed by any Internet device using the Domain Name Service (DNS) of *611.TO*.
 
