@@ -1,9 +1,9 @@
 # 611 (SixEleven) docker iamge
 
-FROM debian:jessie
+FROM debian:stretch
 
 MAINTAINER Florian Fuessl <flo@degnet.de>
-ENV REFRESHED_AT 20160321
+ENV REFRESHED_AT 20171029
 
 RUN groupadd -r sixeleven && useradd -r -m -g sixeleven sixeleven
 
@@ -13,12 +13,12 @@ RUN set -ex \
 
 	# install dependencies
 	&& apt-get install -y --no-install-recommends ca-certificates wget \
-		build-essential libssl-dev libboost-all-dev git \
+		build-essential libssl1.0-dev gnupg dirmngr libboost-all-dev zlib1g-dev git \
 
 	# grab gosu for easy step-down from root
-	&& gpg --keyserver pool.sks-keyservers.net --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4 \
-	&& wget -qO /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/1.7/gosu-$(dpkg --print-architecture)" \
-	&& wget -qO /usr/local/bin/gosu.asc "https://github.com/tianon/gosu/releases/download/1.7/gosu-$(dpkg --print-architecture).asc" \
+	&& gpg --keyserver pgp.mit.edu --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4 \
+	&& wget -qO /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/1.10/gosu-$(dpkg --print-architecture)" \
+	&& wget -qO /usr/local/bin/gosu.asc "https://github.com/tianon/gosu/releases/download/1.10/gosu-$(dpkg --print-architecture).asc" \
 	&& gpg --verify /usr/local/bin/gosu.asc \
 	&& rm /usr/local/bin/gosu.asc \
 	&& chmod +x /usr/local/bin/gosu \
@@ -33,7 +33,7 @@ RUN set -ex \
 
 	# cleanup
 	&& cd ../.. && rm -rf /usr/src/sixeleven \
-	&& apt-get -y purge build-essential libssl-dev libboost-all-dev git \
+	&& apt-get -y purge build-essential libssl1.0-dev gnupg dirmngr libboost-all-dev zlib1g-dev git \
 	&& apt-get -y autoremove \
 	&& apt-get clean \
 	&& rm -rf /var/lib/apt/lists/*
