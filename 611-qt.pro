@@ -1,4 +1,4 @@
-TEMPLATE = app
+EMPLATE = app
 TARGET = 611-qt
 macx:TARGET = "611-Qt"
 VERSION = 0.6.11
@@ -75,10 +75,18 @@ contains(USE_QRCODE, 1) {
 
 macx: {
     QMAKE_CFLAGS += -stdlib=libc++
-    QMAKE_CXXFLAGS += -stdlib=libc++
+    QMAKE_CXXFLAGS += -stdlib=libc++ -Wno-narrowing
     QMAKE_LFLAGS += -stdlib=libc++
-    MINIUPNPC_INCLUDE_PATH = /opt/local/include
-    MINIUPNPC_LIB_PATH = /opt/local/lib
+    BDB_INCLUDE_PATH = /usr/local/opt/berkeley-db@4/include
+    BDB_LIB_PATH = /usr/local/opt/berkeley-db@4/lib
+    BOOST_INCLUDE_PATH = /usr/local/Cellar/boost@1.60/1.60.0/include
+    BOOST_LIB_PATH = /usr/local/Cellar/boost@1.60/1.60.0/lib
+    MINIUPNPC_INCLUDE_PATH = /usr/local/opt/miniupnpc/include
+    MINIUPNPC_LIB_PATH = /usr/local/opt/miniupnpc/lib
+    QRENCODE_INCLUDE_PATH = /usr/local/opt/libqrencode/include
+    QRENCODE_LIB_PATH = /usr/local/opt/libqrencode/lib
+    OPENSSL_INCLUDE_PATH = /usr/local/opt/openssl/include
+    OPENSSL_LIB_PATH = /usr/local/opt/openssl/lib
 }
 
 win32: {
@@ -477,5 +485,5 @@ win32:LIBS += -lboost_chrono$$BOOST_LIB_SUFFIX
 
 system($$QMAKE_LRELEASE $$_PRO_FILE_)
 
-OBJECTIVE_SOURCES += \
-    src/qt/macnotificationhandler.mm
+#OBJECTIVE_SOURCES += \
+#    src/qt/macnotificationhandler.mm
