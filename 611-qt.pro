@@ -1,4 +1,4 @@
-EMPLATE = app
+TEMPLATE = app
 TARGET = 611-qt
 macx:TARGET = "611-Qt"
 VERSION = 0.6.11
