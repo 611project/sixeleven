@@ -1,9 +1,31 @@
 HOWTO COMPILE 611 ON OSX
 
-(1) using macports (out of memory - hope I did not miss anything important)
-port install miniupnpc db48 automake autoconf cmake gcc5 icu qrencode
+You can use brew or macports to compile 611 on OSX
 
-(2) download and install a copy of boost manually to /opt/boost-[version],
+(A) using brew
+ 1) install dependancies (brew):
+   brew install miniupnpc berkeley-db@4 automake autoconf cmake icu4c \
+       qrencode boost@1.60 qt
+
+ 2) download and extract sixeleven (611)
+  (a) create the Qt makefile
+     /usr/local/Cellar/qt/*/bin/qmake "RELEASE=1" "USE_QRCODE=1" 611-qt.pro
+  (b) run the make (optional with -j4 for four processes)
+     time make -j4
+  (c) that's it: enjoy your self compiled 611-Qt (app)
+
+ 3) in order to create an exportable dmg image without
+    requiring local libraries you need to deploy 611-Qt (app)
+    ./contrib/macdeploy/macdeployqtplus 611-Qt.app \
+       -add-qt-tr da,de,es,hu,ru,uk,zh_CN,zh_TW -translations-dir= \
+       -dmg -fancy ./contrib/macdeploy/fancy.plist -verbose 2
+
+
+(B) using macports
+ 1) install dependancies (ports):
+   port install miniupnpc db48 automake autoconf cmake gcc5 icu qrencode
+
+ 2) download and install a copy of boost manually to /opt/boost-[version],
     because using the macports package results in link errors compiling
     611-Qt in the later step(s).
   (a) in detail I did download and extract: boost_1_59_0.tar.bz2
@@ -18,18 +40,18 @@ port install miniupnpc db48 automake autoconf cmake gcc5 icu qrencode
          cxxflags="-stdlib=libc++" linkflags="-stdlib=libc++" \
          install 
 
-(3) download Qt 5.4.x (I did use Qt 5.4.2); newer version may work...
+ 3) download Qt 5.4.x (I did use Qt 5.4.2); newer version may work...
   (a) I did download qt-opensource-mac-x64-clang-5.4.2.dmg
   (b) install it to ~/Qt5.4.2 [default path]
 
-(4) download and extract sixeleven (611)
+ 4) download and extract sixeleven (611)
   (a) create the Qt makefile
      ~/Qt5.4.2/5.4/clang_64/bin/qmake "RELEASE=1" "USE_QRCODE=1" 611-qt.pro
   (b) run the make (optional with -j4 for four processes)
      time make -j4
   (c) that's it: enjoy your self compiled 611-Qt (app)
 
-(5) in order to create an exportable dmg image without
+ 5) in order to create an exportable dmg image without
     requiring local libraries you need to deploy 611-Qt (app)
     ./contrib/macdeploy/macdeployqtplus 611-Qt.app \
        -add-qt-tr da,de,es,hu,ru,uk,zh_CN,zh_TW -translations-dir= \
