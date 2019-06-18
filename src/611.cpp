@@ -2734,7 +2734,12 @@ bool C611Hooks::Lockin(int nHeight, uint256 hash)
                 (nHeight == 222011 && hash != uint256("0xd6ad111284cdec3a8b891c6ace0165bfaf07c418ad2c196e38e1245ec0c11e0c")) ||
                 (nHeight == 244011 && hash != uint256("0xd756d9fbaec27874fbc918845c5da0330e19fea6a81d7cc9615079bbc4f5fac8")) ||
                 (nHeight == 277011 && hash != uint256("0x95574a83f3d293bd5f646a77f92e50a69809a26174281d2169b0f2e165795a7b")) ||
-                (nHeight == 285611 && hash != uint256("0x2b81630d8b79734c1fb75b10a0e2a0230c6c405a3a2d1120a54f8c22b92b2e0e")))
+                (nHeight == 285611 && hash != uint256("0x2b81630d8b79734c1fb75b10a0e2a0230c6c405a3a2d1120a54f8c22b92b2e0e")) ||
+                (nHeight == 299611 && hash != uint256("0xd2ecbcf4684af0b0f477b3693b9769c22a6bc7bbc4df5f91fd394e431e6292b9")) ||
+                (nHeight == 308999 && hash != uint256("0xb17cc7be11a9fb4006a4d492fbfa23111efae4e1a35593e34ce4280ecd0b6668")) ||
+                (nHeight == 319042 && hash != uint256("0xd06b2629671c95ca1ae3ff60920a9bb363f5acac6307ca7fe67fc651e15ef956")) ||
+                (nHeight == 332211 && hash != uint256("0xad16a5236ce71ac3f67c1364d66dea0d640f9d7ea50f12cefdfb5a25e3b5dbe3")) ||
+                (nHeight == 344555 && hash != uint256("0x95c29ef537bbfcbe46793c739330ac003015291f0bf5463b6af84690b5911191")))
             return false;
     return true;
 }
