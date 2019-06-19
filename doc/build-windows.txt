@@ -1,67 +1,113 @@
 HOWTO COMPILE 611 ON WINDOWS
-based on guide: https://bitcointalk.org/index.php?topic=149479.0
+based on the guide: https://bitcointalk.org/index.php?topic=149479.0
 
 (1) download and install base MinGW from:
-http://sourceforge.net/projects/mingw/files/Installer/mingw-get-setup.exe/download
+	http://sourceforge.net/projects/mingw/files/Installer/mingw-get-setup.exe/download
 
-From MinGW installation manager -> All packages -> MSYS
-mark the following for installation:
+	choose MinGW installation manager -> All packages -> MSYS
+	mark the following for installation:
+	+ msys-base-bin
+	+ msys-autoconf-bin
+	+ msys-automake-bin
+	+ msys-libtool-bin
 
-msys-base-bin
-msys-autoconf-bin
-msys-automake-bin
-msys-libtool-bin
+	Make sure no mingw packages are checked for installation or present from a previous install.
+	Only the above msys packages should be installed.
+	Also make sure that msys-gcc and msys-w32api packages are NOT installed.
 
-Make sure no mingw packages are checked for installation or present from a previous install. Only the above msys packages should be installed. Also make sure that msys-gcc and msys-w32api packages are not installed.
+(2) download and install MinGW-build project toolchain from:
+	https://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win32/Personal%20Builds/mingw-builds/8.1.0/threads-posix/dwarf/i686-8.1.0-release-posix-dwarf-rt_v6-rev0.7z/download
 
-(2) download and install MinGW-builds project toolchain from:https://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win32/Personal%20Builds/mingw-builds/8.1.0/threads-posix/dwarf/
-https://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win32/Personal%20Builds/mingw-builds/8.1.0/threads-posix/dwarf/i686-8.1.0-release-posix-dwarf-rt_v6-rev0.7z/downloadhttp://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win32/Personal%20Builds/mingw-builds/4.9.2/threads-posix/dwarf/i686-4.9.2-release-posix-dwarf-rt_v3-rev1.7z/download
+	Ensure that mingw-builds bin folder is set in your PATH environment variable, like:
+	PATH=C:\mingw32\bin;%PATH%
 
- Ensure that mingw-builds bin folder is set in your PATH environment variable. On Windows 7 your path should look something like:
- C:\mingw32\bin;...!!OLDPATH!!...
- 
-!! --> open C:\MinGW\msys\1.0\msys.bat SHELL !!
- 
-(3) download dependencies and unpack to C:\deps\... :
-(3.1) OpenSSL 1.0.2p:
-	./configure mingw
-	make
-(3.2) Berkeley DB 4.8:
-	cd build_unix
+(3) download and unpack the following packages to C:\deps:
+(3.1) Berkeley DB 4.8:
+	http://download.oracle.com/berkeley-db/db-4.8.30.NC.tar.gz
+	-> extract to C:\deps\db-4.8.30.NC
+(3.2) OpenSSL 1.0.2s:
+	https://www.openssl.org/source/openssl-1.0.2s.tar.gz
+	-> extract to C:\deps\openssl-1.0.2s
+(3.3a) libPNG 1.6.37:
+	https://sourceforge.net/projects/libpng/files/libpng16/1.6.37/libpng-1.6.37.tar.xz/download
+	-> extract to C:\deps\libpng-1.6.37
+(3.3b) libPNG patch, because https://sourceforge.net/p/libpng/bugs/273/:
+	https://sourceforge.net/p/libpng/bugs/_discuss/thread/376bc3c4/82fd/attachment/dfn.awk.patch
+	-> patch directory C:\deps\libpng-1.6.37 with dfn.awk.patch
+(3.4) libqrencode 4.0.2:
+	https://fukuchi.org/works/qrencode/qrencode-4.0.2.tar.gz
+	-> extract to C:\deps\qrencode-4.0.2
+(3.5) MiniUPNP 2.1:
+	http://miniupnp.free.fr/files/download.php?file=miniupnpc-2.1.tar.gz
+	or latest 2.1 ...
+	-> extract to C:\deps\miniupnpc-2.1\miniupnpc
+(3.6) Boost 1.60:
+	https://sourceforge.net/projects/boost/files/boost/1.60.0/boost_1_60_0.7z/download
+	-> extract to C:\deps\boost_1_60_0
+(3.7) Qt 5.4.12 Base:
+	http://download.qt.io/archive/qt/5.12/5.12.4/submodules/qtbase-everywhere-src-5.12.4.tar.xz
+	-> extract qtbase-everywhere-src-5.12.4.tar.xz to C:\deps\Qt-5.12.4
+(3.8) Qt 5.4.12 Tools:
+	http://download.qt.io/archive/qt/5.12/5.12.4/submodules/qttools-everywhere-src-5.12.4.tar.xz
+	-> extract qttools-everywhere-src-5.12.4.tar.xz to C:\deps\qttools-everywhere-src-5.12.4
+
+(4) open C:\MinGW\msys\1.0\msys.bat SHELL:
+(4.1) compile Berkeley DB 4.8:
+	cd C:\deps\db-4.8.30.NC\build_unix
 	../dist/configure --enable-mingw --enable-cxx --disable-replication
 	make
-(3.3) libPNG from GitHub:
-      hint: take care about https://sourceforge.net/p/libpng/bugs/273/
-      - download and apply patch: https://sourceforge.net/p/libpng/bugs/_discuss/thread/376bc3c4/82fd/attachment/dfn.awk.patch
-	  - and maybe some dos2unix for awk scripts in case of errors...
+(4.2) compile OpenSSL 1.0.2:
+	cd C:\deps\openssl-1.0.2s
+	./configure mingw
+	make
+(4.3) compile libPNG:
+	cd C:\deps\libpng-1.6.37
 	configure --enable-static --disable-shared 
 	make
 	cp .libs/libpng16.a .libs/libpng.a
-(3.4) libqrencode:
-        png_CFLAGS="-I/c/deps/libpng" png_LIBS="/c/deps/libpng/.libs/libpng16.a -lz" ./configure --enable-static --enable-shared=no
+	# hint: dos2unix file(s) in case of compile errors
+(4.4) compile libqrencode:
+	cd C:\deps\qrencode-4.0.2
+        png_CFLAGS="-I/c/deps/libpng-1.6.37" \
+		png_LIBS="/c/deps/libpng-1.6.37/.libs/libpng16.a -lz" \
+		./configure --enable-static --enable-shared=no
         make
 
-!! --> open standard CMD SHELL !!
-
-(3.5) Boost 1.60.0:
-	bootstrap.bat mingw
-	b2 --build-type=complete --with-chrono --with-filesystem --with-program_options --with-system --with-thread toolset=gcc variant=release link=static threading=multi runtime-link=static stage
-(3.6) MiniUPNP:
+(5) open standard windows cmd SHELL
+(5.1) compile MiniUPnPc:
+	cd C:\deps\miniupnpc-2.1\miniupnpc
+	# edit Makefile.mingw, change: CC = gcc
 	mingw32-make -f Makefile.mingw init upnpc-static
-
-(4) Qt
-(4.1) prepare Qt
-	set INCLUDE=C:\deps\libpng;C:\deps\qrencode-4.0.2;C:\deps\openssl-1.0.2p\include
-	set LIB=C:\deps\libpng\.libs;C:\deps\qrencode-4.0.2\.libs;C:\deps\openssl-1.0.2p
-	cd C:\deps\Qt-5.4.2
-	configure.bat -release -opensource -confirm-license -static -make libs -no-sql-sqlite -no-opengl -system-zlib -qt-pcre -no-icu -no-gif -system-libpng -no-libjpeg -no-freetype -no-angle -no-vcproj -openssl -no-dbus -no-audio-backend -no-wmf-backend -no-qml-debug
+(5.2) Boost 1.60.0:
+	cd C:\deps\boost_1_60_0
+	bootstrap.bat mingw
+	b2 --build-type=complete --with-chrono --with-filesystem \
+		--with-program_options --with-system --with-thread \
+		toolset=gcc variant=release link=static \
+		threading=multi runtime-link=static stage
+(5.3) Qt 5.12.4 Base:
+	cd C:\deps\Qt-5.12.4
+	configure.bat -prefix C:\Qt\Qt5.12.4-static -mp -release -opensource \
+		-confirm-license -static -qt-zlib -qt-pcre -qt-libpng -qt-libjpeg -qt-freetype \
+		-opengl desktop -sql-sqlite -sql-odbc -opensource -confirm-license -make libs \
+		-nomake tools -nomake examples -nomake tests \
+		-I "C:\deps\openssl-1.0.2s\include" -L "C:\deps\openssl-1.0.2s" -ssl -openssl
 	mingw32-make
-	set PATH=C:\deps\Qt-5.4.2\bin;%PATH%
-	cd C:\Qt\qttools-opensource-src-5.3.2
+	mingw32-make install
+	set PATH=C:\Qt\Qt5.12.4-static\bin;%PATH
+
+(5.4) Qt 5.12.4 Tools:
+	cd C:\deps\qttools-everywhere-src-5.12.4
 	qmake qttools.pro
 	mingw32-make
+	mingw32-make install
 
-(4.2) compile 611 with statically linked libraries
+(6) compile SixElevenCoin (611) with statically linked libraries:
+	# hint: take care to have the static compiled version of Qt 5.12.4 set into the PATH
+	#       variable first with: set PATH=C:\Qt\Qt5.12.4-static\bin;%PATH
+	cd C:\dev\sixeleven
 	qmake "RELEASE=1" "USE_UPNP=1" "USE_QRCODE=1" 611-qt.pro
-	mingw32-make -j4
+	mingw32-make
+	# hint: with success compiled 611-qt.exe released should be located 
+	#       in the directory: C:\dev\sixeleven\release
 
