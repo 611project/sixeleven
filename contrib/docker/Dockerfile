@@ -3,7 +3,7 @@
 FROM debian:stretch
 
 MAINTAINER Florian Fuessl <flo@degnet.de>
-ENV REFRESHED_AT 20190620
+ENV REFRESHED_AT 20191224
 
 RUN groupadd -r sixeleven && useradd -r -m -g sixeleven sixeleven
 
