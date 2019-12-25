@@ -2,7 +2,7 @@
 
 FROM debian:stretch
 
-MAINTAINER Florian Fuessl <flo@degnet.de>
+MAINTAINER 611project
 ENV REFRESHED_AT 20191224
 
 RUN groupadd -r sixeleven && useradd -r -m -g sixeleven sixeleven
