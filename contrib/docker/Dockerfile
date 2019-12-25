@@ -3,7 +3,7 @@
 FROM debian:stretch
 
 MAINTAINER Florian Fuessl <flo@degnet.de>
-ENV REFRESHED_AT 20171029
+ENV REFRESHED_AT 20190620
 
 RUN groupadd -r sixeleven && useradd -r -m -g sixeleven sixeleven
 
@@ -16,9 +16,22 @@ RUN set -ex \
 		build-essential libssl1.0-dev gnupg dirmngr libboost-all-dev zlib1g-dev git \
 
 	# grab gosu for easy step-down from root
-	&& gpg --keyserver pgp.mit.edu --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4 \
-	&& wget -qO /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/1.10/gosu-$(dpkg --print-architecture)" \
-	&& wget -qO /usr/local/bin/gosu.asc "https://github.com/tianon/gosu/releases/download/1.10/gosu-$(dpkg --print-architecture).asc" \
+	&& for key in \
+	  B42F6819007F00F88E364FD4036A9C25BF357DD4 \
+        ; do \
+	  for server in $( \
+	    shuf -e ha.pool.sks-keyservers.net \
+	    hkp://p80.pool.sks-keyservers.net:80 \
+	    keyserver.ubuntu.com \
+	    hkp://keyserver.ubuntu.com:80 \
+	    keyserver.pgp.com \
+	    pgp.mit.edu \
+	  ) ; do \
+	    gpg --keyserver "$server" --recv-keys "$key" && break || : ; \
+	  done; \
+	done \
+	&& wget -qO /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/1.11/gosu-$(dpkg --print-architecture)" \
+	&& wget -qO /usr/local/bin/gosu.asc "https://github.com/tianon/gosu/releases/download/1.11/gosu-$(dpkg --print-architecture).asc" \
 	&& gpg --verify /usr/local/bin/gosu.asc \
 	&& rm /usr/local/bin/gosu.asc \
 	&& chmod +x /usr/local/bin/gosu \
