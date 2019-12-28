@@ -5,7 +5,7 @@ VERSION = 0.6.11
 INCLUDEPATH += src src/json src/qt
 QT += core gui network
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
-DEFINES += GUI QT_GUI BOOST_THREAD_USE_LIB BOOST_SPIRIT_THREADSAFE
+DEFINES += GUI QT_GUI BOOST_THREAD_USE_LIB BOOST_SPIRIT_THREADSAFE BOOST_ASIO_ENABLE_OLD_SERVICES
 CONFIG += no_include_pwd
 #CONFIG += thread
 CONFIG += x86
@@ -89,9 +89,15 @@ macx: {
     OPENSSL_LIB_PATH = /usr/local/opt/openssl/lib
 }
 
+    QMAKE_CXXFLAGS += -Wno-narrowing
+    BDB_INCLUDE_PATH = /opt/db48/include
+    BDB_LIB_PATH = /opt/db48/lib
+    OPENSSL_INCLUDE_PATH = /opt/openssl/1.0.2/include
+    OPENSSL_LIB_PATH = /opt/openssl/1.0.2/lib
+
 win32: {
     QMAKE_CFLAGS += -stdlib=libstdc++
-	QMAKE_CXXFLAGS += -Wno-narrowing
+    QMAKE_CXXFLAGS += -Wno-narrowing
     QMAKE_CXXFLAGS += -DMINIUPNP_STATICLIB
     QMAKE_CXXFLAGS += -I../../deps/libpng-1.6.37
     QMAKE_LFLAGS += -L../../deps/libpng-1.6.37/.libs
@@ -468,20 +474,22 @@ contains(RELEASE, 1) {
         #       static linked libraries.
         LIBS += -Wl,-Bdynamic
         QMAKE_LFLAGS += -static -static-libgcc
-        # build against contrib db48 on Linux if available
+        # build against contrib db48 and openssl10x on Linux if available
         BDB_INCLUDE_PATH = contrib/db48/include
         BDB_LIB_PATH = contrib/db48/lib
+	OPENSSL_INCLUDE_PATH = contrib/openssl/1.0.2/include
+	OPENSSL_LIB_PATH = contrib/openssl/1.0.2/lib
     }
 }
 
 # Set libraries and includes at end, to use platform-defined defaults if not overridden
 INCLUDEPATH += $$BOOST_INCLUDE_PATH $$BDB_INCLUDE_PATH $$OPENSSL_INCLUDE_PATH $$QRENCODE_INCLUDE_PATH
 LIBS += $$join(BOOST_LIB_PATH,,-L,) $$join(BDB_LIB_PATH,,-L,) $$join(OPENSSL_LIB_PATH,,-L,) $$join(QRENCODE_LIB_PATH,,-L,)
-LIBS += -lssl -lcrypto -ldb_cxx$$BDB_LIB_SUFFIX
+LIBS += -lssl -lcrypto -ldb_cxx$$BDB_LIB_SUFFIX -ldl
 # -lgdi32 has to happen after -lcrypto (see  #681)
 win32:LIBS += -lws2_32 -lshlwapi -lmswsock -lole32 -loleaut32 -luuid -lgdi32
-LIBS += -lboost_system$$BOOST_LIB_SUFFIX -lboost_filesystem$$BOOST_LIB_SUFFIX -lboost_program_options$$BOOST_LIB_SUFFIX -lboost_thread$$BOOST_THREAD_LIB_SUFFIX
-win32:LIBS += -lboost_chrono$$BOOST_LIB_SUFFIX
+LIBS += -lboost_system$$BOOST_LIB_SUFFIX -lboost_filesystem$$BOOST_LIB_SUFFIX -lboost_program_options$$BOOST_LIB_SUFFIX -lboost_thread$$BOOST_THREAD_LIB_SUFFIX -lboost_chrono$$BOOST_LIB_SUFFIX
+#win32:LIBS += -lboost_chrono$$BOOST_LIB_SUFFIX
 
 
 system($$QMAKE_LRELEASE $$_PRO_FILE_)
