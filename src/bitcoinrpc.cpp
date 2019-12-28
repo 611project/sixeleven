@@ -4170,7 +4170,7 @@ void ThreadRPCServer2(void* parg)
     acceptor.set_option(boost::asio::ip::tcp::acceptor::reuse_address(true));
 
 #ifdef USE_SSL
-    ssl::context context(io_service, ssl::context::sslv23);
+    ssl::context context(ssl::context::sslv23);
     if (fUseSSL)
     {
         context.set_options(ssl::context::no_sslv2);
@@ -4185,7 +4185,7 @@ void ThreadRPCServer2(void* parg)
 
         string ciphers = GetArg("-rpcsslciphers",
                                          "TLSv1+HIGH:!SSLv2:!aNULL:!eNULL:!AH:!3DES:@STRENGTH");
-        SSL_CTX_set_cipher_list(context.impl(), ciphers.c_str());
+        SSL_CTX_set_cipher_list(context.native_handle(), ciphers.c_str());
     }
 #else
     if (fUseSSL)
@@ -4379,7 +4379,7 @@ Object CallRPC(const string& strMethod, const Array& params)
     bool fUseSSL = GetBoolArg("-rpcssl");
 #ifdef USE_SSL
     asio::io_service io_service;
-    ssl::context context(io_service, ssl::context::sslv23);
+    ssl::context context(ssl::context::sslv23);
     context.set_options(ssl::context::no_sslv2);
     SSLStream sslStream(io_service, context);
     SSLIOStreamDevice d(sslStream, fUseSSL);
