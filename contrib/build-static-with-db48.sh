@@ -39,7 +39,8 @@ OPENSSL_PREFIX="${SIXELEVEN_ROOT}/contrib/openssl"
 mkdir -p $SIXELEVEN_ROOT/build \
   && cd $SIXELEVEN_ROOT/src \
   && make \
-  && install 611d $SIXELEVEN_ROOT/build
+  && install 611d $SIXELEVEN_ROOT/build \
+  && make clean
 
 # Return to contrib
 cd $SIXELEVEN_ROOT/contrib
