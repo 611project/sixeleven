@@ -474,11 +474,12 @@ contains(RELEASE, 1) {
         #       static linked libraries.
         LIBS += -Wl,-Bdynamic
         QMAKE_LFLAGS += -static -static-libgcc
-        # build against contrib db48 and openssl10x on Linux if available
+        # build against contrib DBD 4.8 and OpenSSL 1.0.2 on Linux if available
+	# hint: contrib/build-static-with-db48.sh
         BDB_INCLUDE_PATH = contrib/db48/include
         BDB_LIB_PATH = contrib/db48/lib
-	OPENSSL_INCLUDE_PATH = contrib/openssl/1.0.2/include
-	OPENSSL_LIB_PATH = contrib/openssl/1.0.2/lib
+	OPENSSL_INCLUDE_PATH = contrib/openssl/include
+	OPENSSL_LIB_PATH = contrib/openssl/lib
     }
 }
 
