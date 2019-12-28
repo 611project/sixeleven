@@ -22,9 +22,9 @@ General
 
 **A:** The miners do, just like in Bitcoin.  The standard network fee is 0.0611 SIL. Increasing the value may have an impact on how fast you want your transaction to be processed.
 
-**Q: How long are names good for?**
+**Q: How long are #611coin names good for?**
 
-**A:** You have to execute an update on a name every 120000 blocks (normally about three months), or it expires.  There is no network fee for updates.
+**A:** You have to execute an update on a name every 108000 blocks (normally 375 days or ~1 year), or it expires.  There is no network fee for updates.
 
 **Q: Do I have to pay renewal fees?**
 
