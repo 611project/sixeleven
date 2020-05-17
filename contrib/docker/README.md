@@ -16,20 +16,20 @@ To build your own image of 611 (SixEleven) from the latest source code on GitHub
 $ docker build -t [YourAlias]/sixeleven .
 ```
 
-Note: After the build is complete replace fflo below with [YourAlias].
+Note: After the build is complete replace 611project below with [YourAlias].
 
 **Usage**
 
 To start a 611 (SixEleven) instance running the latest version:
 
 ```
-$ docker run --name some-sixeleven fflo/sixeleven
+$ docker run --name some-sixeleven 611project/sixeleven
 ```
 
 To run a 611 (SixEleven) container in the background, pass the `-d` option to `docker run`:
 
 ```
-$ docker run -d --name some-sixeleven fflo/sixeleven
+$ docker run -d --name some-sixeleven 611project/sixeleven
 ```
 
 Once you have a 611 (SixEleven) service running in the background, you can show running containers:
@@ -59,7 +59,7 @@ To create a simple `busybox` data volume and link it to a 611 (SixEleven) servic
 
 ```
 $ docker create -v /sixeleven --name sixeleven-data busybox /bin/true
-$ docker run --volumes-from=sixeleven-data --name=sixeleven-node -d -p 8661:8661 -p 127.0.0.1:8663:8663 fflo/sixeleven
+$ docker run --volumes-from=sixeleven-data --name=sixeleven-node -d -p 8661:8661 -p 127.0.0.1:8663:8663 611project/sixeleven
 ```
 
 **Configuring 611 (SixEleven)**
@@ -67,7 +67,7 @@ $ docker run --volumes-from=sixeleven-data --name=sixeleven-node -d -p 8661:8661
 The easiest method to configure the 611 (SixEleven) server is to pass arguments to the `611d` command. For example, to run 611 through localhost tor socks proxy on port 9050:
 
 ```
-$ docker run --name sixeleven-node fflo/sixeleven 611d -proxy=127.0.0.1:9050
+$ docker run --name sixeleven-node 611project/sixeleven 611d -proxy=127.0.0.1:9050
 ```
 
 **Debug / Logfile**
