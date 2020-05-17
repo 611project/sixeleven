@@ -13,14 +13,14 @@ DEFS += -DBOOST_THREAD_USE_LIB
 #	-I../libs/db-4.7.25.NC/build_unix \
 #	-I../libs/boost_1_50_0
 INCLUDEPATHS= \
-	-I../contrib/db48/include
+	-I../contrib/db48/include -I../contrib/openssl/include
 
 #LIBPATHS= \
 #	-L../libs/openssl-1.0.1i \
 #	-L../libs/db-4.7.25.NC/build_unix \
 #	-L../libs/boost_1_50_0/stage/lib
 LIBPATHS= \
-	-L../contrib/db48/lib
+	-L../contrib/db48/lib -L../contrib/openssl/lib
 
 LIBBOOST_SUFFIX=
 

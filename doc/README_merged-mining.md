@@ -39,16 +39,16 @@ Currently acceptance of aux proof of work is disabled on the production bitcoin 
 
 To enable a synchronized upgrade to a chain, a starting block number can be configured in GetAuxPowStartBlock().
 
-How To Example for Bitcoin / 611
-=====================================
+How To Example for Bitcoin and #611coin
+=======================================
 
-This example assumes bitcoin RPC port is 8332 and 611 is at port 8331.
+This example assumes bitcoin RPC port is 8332 and 611d RPC is at port 8663.
 
-Compile 611d and bitcoind with the merged mining patch.  Then run:
+Compile 611d and bitcoind. Then run:
 
-  `contrib/merged-mine-proxy -w 8330 -p http://pw:un@127.0.0.1:8332/ -x http://pw:un@127.0.0.1:8331/`
+  `contrib/merged-mine-proxy -w 8333 -p http://pw:un@127.0.0.1:8332/ -x http://pw:un@127.0.0.1:8663/`
 
-This will have the proxy listen at port 8330.  
+This will have the proxy listen at port 8333.  
 
-Point your miner at 127.0.0.1 port 8330 and start mining.
+Point your miner at 127.0.0.1 port 8333 and start mining.
 
