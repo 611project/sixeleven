@@ -1,5 +1,5 @@
 # 611 (SixEleven) Coin Wallet on Docker
-FROM debian:buster-slim AS builder
+FROM debian:bullseye AS builder
 
 MAINTAINER 611project
 ENV REFRESHED_AT 20231028
@@ -18,7 +18,7 @@ RUN set -ex; \
 	./build-static-with-db48.sh ; \
 	strip ../build/611d
 
-FROM debian:buster-slim
+FROM debian:bullseye-slim
 
 RUN groupadd -r sixeleven && useradd -r -m -g sixeleven sixeleven
 
