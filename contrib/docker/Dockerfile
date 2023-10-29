@@ -11,7 +11,7 @@ RUN set -ex; \
         apt-get upgrade -y ; \
 	# install dependencies
 	apt-get install -y --no-install-recommends ca-certificates wget \
-		build-essential dirmngr libboost-all-dev zlib1g-dev git ; \
+		build-essential dirmngr libboost1.67-all-dev zlib1g-dev git ; \
 	# compile and install 611
 	cd /usr/src ; \
 	git clone https://github.com/611project/sixeleven.git sixeleven ; \
