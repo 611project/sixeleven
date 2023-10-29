@@ -1,6 +1,10 @@
 name: C/C++ CI
 
-on: [push]
+on:
+  push:
+    branches: [ "master" ]
+#  pull_request:
+#    branches: [ "master" ]
 
 jobs:
   build:
@@ -8,6 +12,6 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v3
     - name: build-static-with-db48-openssl102
       run: cd contrib && ./build-static-with-db48.sh
