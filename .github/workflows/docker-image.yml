@@ -46,7 +46,7 @@ jobs:
           # list of Docker images to use as base name for tags
           images: 611project/611coin         
           # generate Docker tags based on the following events/attributes
-          tags: buster
+          tags: latest
 #          tags: |
 #            type=schedule
 #            type=ref,event=branch
