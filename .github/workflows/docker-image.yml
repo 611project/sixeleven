@@ -46,7 +46,7 @@ jobs:
           # list of Docker images to use as base name for tags
           images: 611project/611coin         
           # generate Docker tags based on the following events/attributes
-          tags: latest
+          tags: buster
 #          tags: |
 #            type=schedule
 #            type=ref,event=branch
@@ -60,7 +60,7 @@ jobs:
         uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671
         with:
           context: ./contrib/docker
-          file: ./contrib/docker/Dockerfile
+          file: ./contrib/docker/Dockerfile.buster
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
