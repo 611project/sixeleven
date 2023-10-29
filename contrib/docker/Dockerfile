@@ -1,13 +1,14 @@
 # 611 (SixEleven) Coin Wallet on Docker
-FROM debian:bullseye AS builder
+FROM ubuntu:focal AS builder
 
 MAINTAINER 611project
 ENV REFRESHED_AT 20231028
 
 # grab the latest 611 source code from git, compile, install and clean up
+ARG DEBIAN_FRONTEND=noninteractive
 RUN set -ex; \
 	apt-get update ; \
-        apt-get upgrade ; \
+        apt-get upgrade -y ; \
 	# install dependencies
 	apt-get install -y --no-install-recommends ca-certificates wget \
 		build-essential dirmngr libboost-all-dev zlib1g-dev git ; \
@@ -18,13 +19,14 @@ RUN set -ex; \
 	./build-static-with-db48.sh ; \
 	strip ../build/611d
 
-FROM debian:bullseye-slim
+FROM ubuntu:focal
 
 RUN groupadd -r sixeleven && useradd -r -m -g sixeleven sixeleven
 
+ARG DEBIAN_FRONTEND=noninteractive
 RUN set -ex; \
 	apt-get update ; \
-	apt-get upgrade ; \
+	apt-get upgrade -y ; \
 	# install dependencies
 	apt-get install -y --no-install-recommends ca-certificates \
 		libgcc1 zlib1g gosu ; \
