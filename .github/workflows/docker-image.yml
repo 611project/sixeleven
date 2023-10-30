@@ -65,7 +65,7 @@ jobs:
         with:
           context: ./contrib/docker
           file: ./contrib/docker/Dockerfile.debian-stretch
-          platforms: linux/amd64
+          platforms: linux/arm/v7
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
