@@ -17,7 +17,7 @@ RUN set -ex; \
 	cd /usr/src ; \
 	git clone https://github.com/611project/sixeleven.git sixeleven ; \
 	cd sixeleven/contrib ; \
-	./build-static-with-db48.sh ; \
+	/bin/bash ./build-static-with-db48.sh ; \
 	strip ../build/611d
 
 FROM debian:stretch
