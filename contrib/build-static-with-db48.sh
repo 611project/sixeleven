@@ -11,9 +11,13 @@ OPENSSL_PREFIX="${SIXELEVEN_ROOT}/contrib/openssl"
     wget 'http://download.oracle.com/berkeley-db/db-4.8.30.NC.tar.gz' \
     && echo '12edc0df75bf9abd7f82f821795bcee50f42cb2e5f76a6a281b85732798364ef  db-4.8.30.NC.tar.gz' | sha256sum -c \
     && tar -xzvf db-4.8.30.NC.tar.gz && rm db-4.8.30.NC.tar.gz \
-    && patch db-4.8.30.NC/dbinc/atomic.h < db48-patch/atomic.patch \
+    && rm db-4.8.30.NC/dist/config.guess db-4.8.30.NC/dist/config.sub \
+    && wget -O db-4.8.30.NC/dist/config.guess "https://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.guess;hb=55eaf3e779455c4e5cc9f82efb5278be8f8f900b" \
+    && wget -O db-4.8.30.NC/dist/config.sub "https://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.sub;hb=55eaf3e779455c4e5cc9f82efb5278be8f8f900b" \
+    && cd db-4.8.30.NC \
+    && patch -p1 < ../db48-patch/atomic_clang.patch \
     && cd db-4.8.30.NC/build_unix/ \
-    && ../dist/configure --enable-cxx --disable-shared --with-pic --prefix=$BDB_PREFIX \
+    && ../dist/configure --enable-cxx --disable-shared --disable-replication --with-pic --prefix=$BDB_PREFIX \
     && make \
     && mkdir -p $BDB_PREFIX \
     && make install \
