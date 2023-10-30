@@ -16,7 +16,7 @@ OPENSSL_PREFIX="${SIXELEVEN_ROOT}/contrib/openssl"
     && wget -O db-4.8.30.NC/dist/config.sub "https://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.sub;hb=55eaf3e779455c4e5cc9f82efb5278be8f8f900b" \
     && cd db-4.8.30.NC \
     && patch -p1 < ../db48-patch/atomic_clang.patch \
-    && cd db-4.8.30.NC/build_unix/ \
+    && cd build_unix \
     && ../dist/configure --enable-cxx --disable-shared --disable-replication --with-pic --prefix=$BDB_PREFIX \
     && make \
     && mkdir -p $BDB_PREFIX \
