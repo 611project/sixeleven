@@ -1,5 +1,5 @@
-611
-===================
+611 - Blockchain
+=====================
 
 611 [coin] is a decentralized key/value registration and transfer system based on *Bitcoin* technology (a decentralized cryptocurrency).
 
