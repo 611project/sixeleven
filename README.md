@@ -13,7 +13,7 @@ The number of 611 coins is restricted to about 611-thousand. Fees and mining val
 
 There is a FAQ.md to answer some general questions.
 
-Check https://www.611project.net for more information.
+Check https://sixone.one for more information.
 
 
 Technical
