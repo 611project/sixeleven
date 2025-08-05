@@ -11,8 +11,8 @@ General
 
 **Q: How do I obtain #611coin?**
 
-**A:** You have to get them by mining, in the usual Bitcoin way, or by obtaining them from someone else.  For example, you could find someone willing to sell SIL for BTC using a cryptocurrency exchange.
- * https://611project.org/trade/
+**A:** You have to get them by mining, in the usual Bitcoin way, or you can find someone willing to sell SIL using a cryptocurrency exchange.
+ * https://sixone.one/trade/
 
 **Q: Who gets the network fee?**
 
@@ -35,7 +35,8 @@ Usage
 
 **Q: How do I run #611coin?**
 
-**A:** Currently you have to download and compile the software yourself or to use one of the precompiled binaries (packages).  You then run the 611d executable.  Configuration is in ~/.611/611d.conf .
+**A:** You can download and compile the software yourself or use one of the precompiled binaries (packages).
+You are free to run the desktop version of #611coin or terminal 611d executable.
 
 **Q: Can I run #611coin and Bitcoin on the same machine?**
 
